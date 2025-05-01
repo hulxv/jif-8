@@ -1,8 +1,9 @@
 package core.instruction;
 
 public abstract class Instruction {
-    enum InstructionType {
+    public enum InstructionType {
         JUMP,
+        NULL,
     }
     public Instruction() {
         System.out.println("Instruction initialized");

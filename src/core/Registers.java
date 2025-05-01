@@ -1,10 +1,10 @@
 package core;
 
 public class Registers {
-    private int[] registers;
+    private byte[] registers;
 
     public Registers() {
-        registers = new int[16]; 
+        registers = new byte[16]; 
         for (int i = 0; i < registers.length; i++) {
             registers[i] = 0;
         }
@@ -17,7 +17,7 @@ public class Registers {
         return registers[index];
     }
 
-    public void setRegister(int index, int value) {
+    public void setRegister(int index, byte value) {
         if (index < 0 || index >= registers.length) {
             throw new IllegalArgumentException("Invalid register index");
         }

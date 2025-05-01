@@ -1,17 +1,26 @@
 package core;
 
 public class Emulator {
-    CPU cpu;
-    Memory memory;
-    Loader loader;
+    private CPU cpu;
+    private Memory memory;
+    private Stack stack;
+    private Display display;
+    private Keyboard keyboard;
+    private SoundSystem soundSystem;
+    private Loader loader;
 
-    Emulator() {
+    public Emulator() {
+        initialize();
+        cpu = new CPU(memory, stack, display, keyboard, soundSystem);
         System.out.println("Emulator initialized");
     }
 
-    public void initialize() {
-        cpu = new CPU();
+    private void initialize() {
         memory = new Memory();
+        stack = new Stack();
+        display = new Display();
+        keyboard = new Keyboard();
+        soundSystem = new SoundSystem();
         loader = new Loader();
         System.out.println("Emulator components initialized");
     }
@@ -24,4 +33,11 @@ public class Emulator {
     public void start() {
         System.out.println("Emulator started");
     }
+
+    public void emulateCycle() {
+        cpu.cycle();
+    }
+
+
+
 }
