@@ -12,7 +12,7 @@ public class SoundSystem {
 
     public void initialize() {
         try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(getClass().getResource("/home/mahmoudfathallah/Project/Project/resources/beep.wav"));
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(getClass().getResource("/beep.wav"));
 
             clip = AudioSystem.getClip();
             clip.open(audioStream);
