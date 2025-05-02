@@ -1,4 +1,5 @@
 import core.CPU;
+import core.Emulator;
 import core.Registers;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        CPU cpu = new CPU();
+        Emulator emulator = new Emulator();
         launch();
     }
 }
