@@ -25,14 +25,48 @@ public class CPU {
         I = 0;
         PC = 0x200;
         this.stack = stack;
-        //delayTimer = 0;
-        //soundTimer = 0;
         this.memory = memory;
         this.display = display;
         this.keyboard = keyboard;
         this.soundSystem = soundSystem;
-        decoder = new Decoder();
+        decoder = new Decoder(this);
         executer = new Executer();
+    }
+
+    public Registers getRegisters() {
+        return registers;
+    }
+
+    public Stack getStack() {
+        return stack;
+    }
+
+    public Memory getMemory() {
+        return memory;
+    }
+
+    public Display getDisplay() {
+        return display;
+    }
+
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
+
+    public SoundSystem getSoundSystem() {
+        return soundSystem;
+    }
+
+    public Decoder getDecoder() {
+        return decoder;
+    }
+
+    public Executer getExecuter() {
+        return executer;
+    }
+
+    public char getOpcode() {
+        return (char) (memory.RAM[this.PC] << 8 | memory.RAM[this.PC + 1]);
     }
 
     public void reset() {
@@ -49,16 +83,19 @@ public class CPU {
 
     public void cycle() {
         char opcode = fetch();
-        //Instruction instruction = decoder.decode(opcode);
-        //executer.execute(instruction);
+        // Instruction instruction = decoder.decode(opcode);
+        // executer.execute(instruction);
         updateTimers();
     }
 
     private void updateTimers() {
-        if (delayTimer > 0) delayTimer--;
-        if (soundTimer > 0) soundTimer--;
+        if (delayTimer > 0)
+            delayTimer--;
+        if (soundTimer > 0)
+            soundTimer--;
 
-        if (soundTimer == 0); //soundSystem.beeb();
+        if (soundTimer == 0)
+            ; // soundSystem.beeb();
     }
 
     public char fetch() {

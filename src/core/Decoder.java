@@ -3,16 +3,15 @@ package core;
 import core.instruction.Instruction;
 import core.instruction.InstructionFactory;
 
-public class Decoder{
-
+public class Decoder {
     protected Opcode opcode;
-    Decoder() {
-        System.out.println("Decoder initialized");
+    private final InstructionFactory factory;
+
+    public Decoder(CPU cpu) {
+        this.factory = new InstructionFactory(cpu);
     }
 
     public Instruction decode(char opcode) {
-        throw new UnsupportedOperationException("Not implemented");
+        return factory.createInstruction(opcode);
     }
-
-
 }
