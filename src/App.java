@@ -1,4 +1,5 @@
 import core.CPU;
+import core.Emulator;
 import core.Registers;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -209,6 +210,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        Emulator emulator = new Emulator();
         launch();
     }
 }
