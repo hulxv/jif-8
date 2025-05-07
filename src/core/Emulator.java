@@ -26,8 +26,15 @@ public class Emulator {
     }
 
     public void loadRom(String romPath) {
-        loader.load(romPath, memory);
-        System.out.println("ROM loaded");
+        try {
+            System.out.println("Loading ROM from: " + romPath);
+            byte[] romData = loader.loadRom(romPath);
+            memory.loadROM(romData);
+            System.out.println("ROM loaded");
+        } catch (Exception e) {
+            System.err.println("Error loading ROM: " + e.getMessage());
+            return;
+        }
     }
 
     public void start() {
@@ -37,7 +44,5 @@ public class Emulator {
     public void emulateCycle() {
         cpu.cycle();
     }
-
-
 
 }
