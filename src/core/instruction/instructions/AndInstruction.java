@@ -14,7 +14,9 @@ public class AndInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will perform AND operation between registers
-        System.out.printf("AND V%X, V%X\n", registerX, registerY);
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+        cpu.getRegisters().setRegister(registerX, (byte) (valueX & valueY));
     }
 
     @Override
