@@ -14,7 +14,16 @@ public class AddRegInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will add VY to VX, set VF = carry
-        System.out.printf("ADD V%X, V%X\n", registerX, registerY);
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+
+        if (valueX > Byte.MAX_VALUE - valueY)
+            cpu.getRegisters().setRegister(15, (byte) 1);
+        
+        else
+            cpu.getRegisters().setRegister(15, (byte) 0);
+
+        cpu.getRegisters().setRegister(registerX, (byte) (valueX + valueY));
     }
 
     @Override

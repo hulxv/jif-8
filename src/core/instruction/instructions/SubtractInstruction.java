@@ -14,7 +14,16 @@ public class SubtractInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will subtract VY from VX, set VF = NOT borrow
-        System.out.printf("SUB V%X, V%X\n", registerX, registerY);
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+
+        if (valueX < Byte.MIN_VALUE - valueY)
+            cpu.getRegisters().setRegister(15, (byte) 1);
+        
+        else
+            cpu.getRegisters().setRegister(15, (byte) 0);
+
+        cpu.getRegisters().setRegister(registerX, (byte) (valueX - valueY));
     }
 
     @Override
