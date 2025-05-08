@@ -14,7 +14,13 @@ public class SkipNotEqualRegInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will skip next instruction if VX not equals VY
-        System.out.printf("SNE V%X, V%X\n", registerX, registerY);
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+        char PC = cpu.getPC();
+        char PCNewValue = (char) (PC + 2);
+
+        if (valueX != valueY) 
+            cpu.setPC(PCNewValue);;
     }
 
     @Override
