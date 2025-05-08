@@ -3,8 +3,8 @@ package core.instruction.instructions;
 import core.instruction.Instruction;
 
 public class RandomInstruction extends Instruction {
-    private final int register;
-    private final int mask;
+    private final int register; // The Vx register index (0 to 15)
+    private final int mask; // NN
 
     public RandomInstruction(int register, int mask) {
         this.register = register;
@@ -13,8 +13,9 @@ public class RandomInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Logic to generate random number & mask will be implemented in CPU
-        System.out.printf("RAND V%X, %X\n", register, mask);
+        byte randomByte = (byte) cpu.generateRandomByte(); // From 0 to 255
+        byte result = (byte) (randomByte & mask); // VX = rand() & NN
+        cpu.getRegisters().setRegister(register, result); // Store the result in register VX
     }
 
     @Override
