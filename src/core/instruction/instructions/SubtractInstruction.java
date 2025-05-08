@@ -17,7 +17,7 @@ public class SubtractInstruction extends Instruction {
         byte valueX = cpu.getRegisters().getRegister(registerX);
         byte valueY = cpu.getRegisters().getRegister(registerY);
 
-        if (valueX < Byte.MIN_VALUE - valueY)
+        if (valueX >= valueY)
             cpu.getRegisters().setRegister(15, (byte) 1);
         
         else

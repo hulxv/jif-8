@@ -17,7 +17,7 @@ public class ReverseSubtractInstruction extends Instruction {
         byte valueX = cpu.getRegisters().getRegister(registerX);
         byte valueY = cpu.getRegisters().getRegister(registerY);
 
-        if (valueY < Byte.MIN_VALUE - valueX)
+        if (valueY >= valueX)
             cpu.getRegisters().setRegister(15, (byte) 1);
         
         else
