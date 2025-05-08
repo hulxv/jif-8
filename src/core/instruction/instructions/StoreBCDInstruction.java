@@ -12,16 +12,16 @@ public class StoreBCDInstruction extends Instruction {
     @Override
     public void execute() {
         byte value = cpu.getRegisters().getRegister(register);
-        
-        byte hundreds = (byte)(value/100);
-        byte tens = (byte)((value/10) % 10);
-        byte ones = (byte)(value % 10);
 
-        char index = cpu.getI();
+        byte hundreds = (byte) (value / 100);
+        byte tens = (byte) ((value / 10) % 10);
+        byte ones = (byte) (value % 10);
 
-        cpu.getMemory().write(index,(char) hundreds);
-        cpu.getMemory().write((char)(index+1),(char) tens);
-        cpu.getMemory().write((char)(index+2),(char) ones);
+        char I = cpu.getI();
+
+        cpu.getMemory().write(I, (char) hundreds);
+        cpu.getMemory().write((char) (I + 1), (char) tens);
+        cpu.getMemory().write((char) (I + 2), (char) ones);
     }
 
     @Override

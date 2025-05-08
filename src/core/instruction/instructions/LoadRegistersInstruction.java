@@ -11,12 +11,10 @@ public class LoadRegistersInstruction extends Instruction {
 
     @Override
     public void execute() {
-
-        for (int i=0; i<=lastRegister;i++) {
-            byte value = cpu.getMemory().read((char)(cpu.getI()+i));
+        for (int i = 0; i <= lastRegister; i++) {
+            byte value = cpu.getMemory().read((char) (cpu.getI() + i));
             cpu.getRegisters().setRegister(i, value);
         }
-
     }
 
     @Override
