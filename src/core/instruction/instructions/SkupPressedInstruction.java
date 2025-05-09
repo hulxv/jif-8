@@ -5,7 +5,7 @@ import core.instruction.Instruction;
 public class SkupPressedInstruction extends Instruction {
     private final int register;
 
-    public SkipIfKeyNotPressedInstruction(int register) {
+    public SkupPressedInstruction(int register) {
         this.register = register;
     }
 
