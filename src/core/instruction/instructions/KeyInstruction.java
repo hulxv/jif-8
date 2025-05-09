@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class WaitKeyInstruction extends Instruction {
+public class KeyInstruction extends Instruction {
     private final int register;
 
-    public WaitKeyInstruction(int register) {
+    public KeyInstruction(int register) {
         this.register = register;
     }
 
