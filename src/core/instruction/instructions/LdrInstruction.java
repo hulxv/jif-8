@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class LoadRegistersInstruction extends Instruction {
+public class LdrInstruction extends Instruction {
     private final int lastRegister;
 
-    public LoadRegistersInstruction(int lastRegister) {
+    public LdrInstruction(int lastRegister) {
         this.lastRegister = lastRegister;
     }
 
@@ -19,6 +19,6 @@ public class LoadRegistersInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("LOAD V0-V%X", lastRegister);
+        return String.format("LDR V0-V%X", lastRegister);
     }
 }

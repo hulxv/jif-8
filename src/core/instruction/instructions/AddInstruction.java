@@ -3,22 +3,31 @@ package core.instruction.instructions;
 import core.instruction.Instruction;
 
 public class AddInstruction extends Instruction {
-    private int operand1;
-    private int operand2;
+    private final int registerX;
+    private final int registerY;
 
-    public AddInstruction(int operand1, int operand2) {
-        this.operand1 = operand1;
-        this.operand2 = operand2;
+    public AddInstruction(int rx, int ry) {
+        this.registerX = rx;
+        this.registerY = ry;
     }
 
+    @Override
     public void execute() {
-        // Logic to add two operands
-        int result = operand1 + operand2;
-        System.out.println("Result of addition: " + result);
+        // Implementation will add VY to VX, set VF = carry
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+
+        if (valueX > Byte.MAX_VALUE - valueY)
+            cpu.getRegisters().setRegister(15, (byte) 1);
+        
+        else
+            cpu.getRegisters().setRegister(15, (byte) 0);
+
+        cpu.getRegisters().setRegister(registerX, (byte) (valueX + valueY));
     }
 
     @Override
     public String toString() {
-        return "ADD " + operand1 + ", " + operand2;
+        return String.format("ADD V%X, V%X", registerX, registerY);
     }
 }

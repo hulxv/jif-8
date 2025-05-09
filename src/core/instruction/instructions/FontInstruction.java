@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class LoadFontInstruction extends Instruction {
+public class FontInstruction extends Instruction {
     private final int register;
 
-    public LoadFontInstruction(int register) {
+    public FontInstruction(int register) {
         this.register = register;
     }
 

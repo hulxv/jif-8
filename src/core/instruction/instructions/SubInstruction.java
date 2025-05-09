@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SubtractInstruction extends Instruction {
+public class SubInstruction extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public SubtractInstruction(int rx, int ry) {
+    public SubInstruction(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }
