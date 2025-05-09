@@ -14,7 +14,16 @@ public class ReverseSubtractInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will set VX to VY - VX, set VF = NOT borrow
-        System.out.printf("SUBN V%X, V%X\n", registerX, registerY);
+        byte valueX = cpu.getRegisters().getRegister(registerX);
+        byte valueY = cpu.getRegisters().getRegister(registerY);
+
+        if (valueY >= valueX)
+            cpu.getRegisters().setRegister(15, (byte) 1);
+        
+        else
+            cpu.getRegisters().setRegister(15, (byte) 0);
+
+        cpu.getRegisters().setRegister(registerX, (byte) (valueY - valueX));
     }
 
     @Override
