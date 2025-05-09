@@ -10,9 +10,12 @@ public class SkprInstruction extends Instruction {
     }
 
     @Override
-    public void execute() {
-        // Implementation will skip next instruction if key in register is pressed
-        System.out.printf("SKPR V%X\n", register);
+    public void execute() {        
+        byte key = cpu.getRegisters().getRegister(register);
+
+        if (cpu.getKeyboard().isKeyPressed(key)) {
+            cpu.setPC((char)(cpu.getPC()+2));
+        }
     }
 
     @Override

@@ -11,8 +11,15 @@ public class KeyInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Wait for key press and store in Vx
-        System.out.printf("KEY V%X, K\n", register);
+        if (!cpu.getKeyboard().isWaitingForKey()) {
+
+            System.out.println("Waiting for key press.....");
+            cpu.getKeyboard().waitForKeyPress(key->{
+                cpu.getRegisters().setRegister(register, key);
+                cpu.setPC((char)(cpu.getPC()+2));
+            });
+            
+        }        
     }
 
     @Override
