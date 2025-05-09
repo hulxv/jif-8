@@ -11,12 +11,17 @@ public class StoreBCDInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Will store BCD representation of VX.
-        // The interpreter takes the decimal value of VX, and places:
-        // - hundreds digit at location in I
-        // - tens digit at location I+1
-        // - ones digit at location I+2
-        System.out.printf("BCD V%X\n", register);
+        byte value = cpu.getRegisters().getRegister(register);
+
+        byte hundreds = (byte) (value / 100);
+        byte tens = (byte) ((value / 10) % 10);
+        byte ones = (byte) (value % 10);
+
+        char I = cpu.getI();
+
+        cpu.getMemory().write(I, (char) hundreds);
+        cpu.getMemory().write((char) (I + 1), (char) tens);
+        cpu.getMemory().write((char) (I + 2), (char) ones);
     }
 
     @Override

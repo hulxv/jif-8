@@ -11,8 +11,10 @@ public class StoreRegistersInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Implementation will store registers V0 through VX at memory location I
-        System.out.printf("STORE V0-V%X\n", lastRegister);
+        for (int i = 0; i <= lastRegister; i++) {
+            byte value = cpu.getRegisters().getRegister(i);
+            cpu.getMemory().write((char)(cpu.getI()+i),(char)value);
+        }
     }
 
     @Override
