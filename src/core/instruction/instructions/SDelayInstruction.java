@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SetDelayTimerInstruction extends Instruction {
+public class SDelayInstruction extends Instruction {
     private final int register;
 
-    public SetDelayTimerInstruction(int register) {
+    public SDelayInstruction(int register) {
         this.register = register;
     }
 

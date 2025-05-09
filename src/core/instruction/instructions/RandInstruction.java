@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class RandomInstruction extends Instruction {
+public class RandInstruction extends Instruction {
     private final int register; // The Vx register index (0 to 15)
     private final int mask; // NN
 
-    public RandomInstruction(int register, int mask) {
+    public RandInstruction(int register, int mask) {
         this.register = register;
         this.mask = mask;
     }

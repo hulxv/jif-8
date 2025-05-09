@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class ReverseSubtractInstruction extends Instruction {
+public class RsbInstruction extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public ReverseSubtractInstruction(int rx, int ry) {
+    public RsbInstruction(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }

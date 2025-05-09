@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class StoreRegistersInstruction extends Instruction {
+public class StrInstruction extends Instruction {
     private final int lastRegister;
 
-    public StoreRegistersInstruction(int lastRegister) {
+    public StrInstruction(int lastRegister) {
         this.lastRegister = lastRegister;
     }
 
@@ -19,6 +19,6 @@ public class StoreRegistersInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("STORE V0-V%X", lastRegister);
+        return String.format("STR V0-V%X", lastRegister);
     }
 }

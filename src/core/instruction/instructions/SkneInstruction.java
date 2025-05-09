@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SkipNotEqualRegInstruction extends Instruction {
+public class SkneInstruction extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public SkipNotEqualRegInstruction(int rx, int ry) {
+    public SkneInstruction(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }
@@ -25,6 +25,6 @@ public class SkipNotEqualRegInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("SNE V%X, V%X", registerX, registerY);
+        return String.format("SKNE V%X, V%X", registerX, registerY);
     }
 }
