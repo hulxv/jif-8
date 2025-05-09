@@ -10,14 +10,12 @@ public class SkprInstruction extends Instruction {
     }
 
     @Override
-    public void execute() {
-        
+    public void execute() {        
         byte key = cpu.getRegisters().getRegister(register);
 
         if (cpu.getKeyboard().isKeyPressed(key)) {
             cpu.setPC((char)(cpu.getPC()+2));
         }
-
     }
 
     @Override

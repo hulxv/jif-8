@@ -3,27 +3,20 @@ package core.instruction.instructions;
 import core.instruction.Instruction;
 
 public class AdiInstruction extends Instruction {
-    private final char address;
+    private final int register;
 
-    public AdiInstruction(char address) {
-        this.address = address;
+    public AdiInstruction(int register) {
+        this.register = register;
     }
 
     @Override
     public void execute() {
-        // Implementation for the ADI instruction
-        System.out.println("Executing ADI instruction with address: " + address);
-        // Assuming CPU has a method to add immediate value to the accumulator
-        // cpu.addImmediate(address);
-    }
-
-    public char getAddress() {
-        return address;
+        // Implementation will add value in VX to index register I
+        System.out.printf("ADI V%X\n", register);
     }
 
     @Override
     public String toString() {
-        return "ADI " + address;
+        return String.format("ADI V%X", register);
     }
-
 }

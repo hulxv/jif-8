@@ -2,32 +2,32 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class AddInstruction extends Instruction {
+public class RsbInstruction extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public AddInstruction(int rx, int ry) {
+    public RsbInstruction(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }
 
     @Override
     public void execute() {
-        // Implementation will add VY to VX, set VF = carry
+        // Implementation will set VX to VY - VX, set VF = NOT borrow
         byte valueX = cpu.getRegisters().getRegister(registerX);
         byte valueY = cpu.getRegisters().getRegister(registerY);
 
-        if (valueX > Byte.MAX_VALUE - valueY)
+        if (valueY >= valueX)
             cpu.getRegisters().setRegister(15, (byte) 1);
         
         else
             cpu.getRegisters().setRegister(15, (byte) 0);
 
-        cpu.getRegisters().setRegister(registerX, (byte) (valueX + valueY));
+        cpu.getRegisters().setRegister(registerX, (byte) (valueY - valueX));
     }
 
     @Override
     public String toString() {
-        return String.format("ADD V%X, V%X", registerX, registerY);
+        return String.format("SUBN V%X, V%X", registerX, registerY);
     }
 }

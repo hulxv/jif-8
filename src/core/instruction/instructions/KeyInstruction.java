@@ -11,7 +11,6 @@ public class KeyInstruction extends Instruction {
 
     @Override
     public void execute() {
-        
         if (!cpu.getKeyboard().isWaitingForKey()) {
 
             System.out.println("Waiting for key press.....");
@@ -21,12 +20,10 @@ public class KeyInstruction extends Instruction {
             });
             
         }        
-
-
     }
 
     @Override
     public String toString() {
-        return String.format("LD V%X, K", register);
+        return String.format("KEY V%X, K", register);
     }
 }
