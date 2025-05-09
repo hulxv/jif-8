@@ -1,5 +1,6 @@
 package core.instruction.instructions;
 
+import core.CPU;
 import core.instruction.Instruction;
 
 public class SkipEqualInstruction extends Instruction {
@@ -14,7 +15,12 @@ public class SkipEqualInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation will skip next instruction if VX equals constant
-        System.out.printf("SE V%X, %02X\n", register, value);
+        byte valueX = cpu.getRegisters().getRegister(register);
+        char PC = cpu.getPC();
+        char PCNewValue = (char) (PC + 2);
+
+        if (valueX == (byte) value) 
+            cpu.setPC(PCNewValue);
     }
 
     @Override
