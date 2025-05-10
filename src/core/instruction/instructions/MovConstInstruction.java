@@ -13,8 +13,8 @@ public class MovConstInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Set Vx = kk
-        System.out.printf("LD V%X, %02X\n", register, value);
+        cpu.getRegisters().setRegister(register,(byte) value);
+        cpu.setPC((char) (cpu.getPC()+2));
     }
 
     @Override

@@ -11,10 +11,9 @@ public class SSoundInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Implementation for sound operation
         System.out.println("Playing sound at address: " + address);
-        // Assuming sound is a field in the CPU class
-        // sound.play(address);
+        cpu.getSoundSystem().playSound(address);                       //remake Method play sound or my implementaion is wrong, i really do not know
+        cpu.setPC((char) (cpu.getPC()+2));
     }
 
     public char getAddress() {
