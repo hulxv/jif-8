@@ -2,25 +2,29 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class AndInstruction extends Instruction {
+public class SkneInstruction extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public AndInstruction(int rx, int ry) {
+    public SkneInstruction(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }
 
     @Override
     public void execute() {
-        // Implementation will perform AND operation between registers
+        // Implementation will skip next instruction if VX not equals VY
         byte valueX = cpu.getRegisters().getRegister(registerX);
         byte valueY = cpu.getRegisters().getRegister(registerY);
-        cpu.getRegisters().setRegister(registerX, (byte) (valueX & valueY));
+        char PC = cpu.getPC();
+        char PCNewValue = (char) (PC + 2);
+
+        if (valueX != valueY) 
+            cpu.setPC(PCNewValue);;
     }
 
     @Override
     public String toString() {
-        return String.format("AND V%X, V%X", registerX, registerY);
+        return String.format("SKNE V%X, V%X", registerX, registerY);
     }
 }

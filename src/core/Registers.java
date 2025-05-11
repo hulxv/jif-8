@@ -10,7 +10,7 @@ public class Registers {
         }
         System.out.println("Registers initialized");
     }
-    public int getRegister(int index) {
+    public byte getRegister(int index) {
         if (index < 0 || index >= registers.length) {
             throw new IllegalArgumentException("Invalid register index");
         }

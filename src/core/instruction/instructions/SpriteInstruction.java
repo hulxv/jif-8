@@ -3,12 +3,19 @@ package core.instruction.instructions;
 import core.Display;
 import core.instruction.Instruction;
 
+<<<<<<< HEAD:src/core/instruction/instructions/DrawSpriteInstruction.java
 public class DrawSpriteInstruction extends Instruction {
     private final int registerX; // Holds X-Coordinate (VX)
     private final int registerY; // Holds Y-Coordinate (VY)
     private final int height; // Number of bytes in the sprite, representing height (each byte is one row of 8 pixels)
+=======
+public class SpriteInstruction extends Instruction {
+    private final int registerX;
+    private final int registerY;
+    private final int height;
+>>>>>>> d780447445250ad4c3c508551f8ee6f29b79c3a3:src/core/instruction/instructions/SpriteInstruction.java
 
-    public DrawSpriteInstruction(int rx, int ry, int height) {
+    public SpriteInstruction(int rx, int ry, int height) {
         this.registerX = rx;
         this.registerY = ry;
         this.height = height;
@@ -16,6 +23,7 @@ public class DrawSpriteInstruction extends Instruction {
 
     @Override
     public void execute() {
+<<<<<<< HEAD:src/core/instruction/instructions/DrawSpriteInstruction.java
         cpu.getRegisters().setRegister(0xF, (byte) 0); // Reset Collision Flag
         final int pixelWidth = 8; // Sprites are always 8 pixels wide
 
@@ -38,10 +46,14 @@ public class DrawSpriteInstruction extends Instruction {
                 }
             }
         }
+=======
+        // Implementation will draw sprite at location (VX,VY) with height N
+        System.out.printf("SPRITE V%X, V%X, %X\n", registerX, registerY, height);
+>>>>>>> d780447445250ad4c3c508551f8ee6f29b79c3a3:src/core/instruction/instructions/SpriteInstruction.java
     }
 
     @Override
     public String toString() {
-        return String.format("DRAW V%X, V%X, %X", registerX, registerY, height);
+        return String.format("SPRITE V%X, V%X, %X", registerX, registerY, height);
     }
 }

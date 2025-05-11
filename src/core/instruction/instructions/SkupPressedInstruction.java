@@ -2,17 +2,22 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SkipIfKeyNotPressedInstruction extends Instruction {
+public class SkupPressedInstruction extends Instruction {
     private final int register;
 
-    public SkipIfKeyNotPressedInstruction(int register) {
+    public SkupPressedInstruction(int register) {
         this.register = register;
     }
 
     @Override
     public void execute() {
-        // Implementation will skip next instruction if key in register is not pressed
-        System.out.printf("SKUP V%X\n", register);
+        byte key = cpu.getRegisters().getRegister(register);
+
+        if (!cpu.getKeyboard().isKeyPressed(key)) {
+            cpu.setPC((char)(cpu.getPC()+2));
+        }
+
+
     }
 
     @Override

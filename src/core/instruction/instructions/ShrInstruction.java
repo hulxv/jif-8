@@ -2,17 +2,19 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class ShiftRightInstruction extends Instruction {
+public class ShrInstruction extends Instruction {
     private final int register;
 
-    public ShiftRightInstruction(int register) {
+    public ShrInstruction(int register) {
         this.register = register;
     }
 
     @Override
     public void execute() {
         // Implementation will shift register right, bit 0 goes to VF
-        System.out.printf("SHR V%X\n", register);
+        byte valueRegister = cpu.getRegisters().getRegister(register);
+        cpu.getRegisters().setRegister(15, (byte) (valueRegister & 0b00000001)); // Saving the most right bit to VF
+        cpu.getRegisters().setRegister(register, (byte) (valueRegister >> 1));
     }
 
     @Override

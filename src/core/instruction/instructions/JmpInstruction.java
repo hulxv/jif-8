@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class JumpInstruction extends Instruction {
+public class JmpInstruction extends Instruction {
     private final char address;
     
-    public JumpInstruction(char address) {
+    public JmpInstruction(char address) {
         this.address = address;
     }
     
