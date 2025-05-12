@@ -13,7 +13,6 @@ public class MovInstruction extends Instruction {
 
     public void execute() {
         byte source = cpu.getRegisters().getRegister(sourceRegister);
-        System.out.println("Moving data from register " + sourceRegister + " to register " + destinationRegister); //see if you will need it for testing or delete it
         cpu.getRegisters().setRegister(destinationRegister, source);
     }
 
