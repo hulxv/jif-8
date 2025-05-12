@@ -11,8 +11,8 @@ public class FontInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Implementation will set I to location of sprite for hex digit VX
-        System.out.printf("FONT V%X\n", register);
+        int digit = cpu.getRegisters().getRegister(register) & 0x0F; // Get lower 4 bits (0–F)
+        cpu.setI((char) (digit * 5)); // Set I to font sprite address
     }
 
     @Override
