@@ -1,4 +1,4 @@
-package core;
+package scenes;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,8 +12,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 
-public class welcomeScene extends Application {
+import core.Emulator;
 
+public class WelcomeScene {
 
     private Font labelFont;
     private Font label2Font;
@@ -21,24 +22,18 @@ public class welcomeScene extends Application {
     private Scene scene1;
     private Stage stage;
 
+    private Emulator emulator;
 
-    @Override
-    public void start(Stage Primarystage) {
-        stage = Primarystage;
-
-
-        labelFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 30);
-        label2Font = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 40);
-        buttonFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 14);
-
-
-        scene1 = createScene1();
-        stage.setTitle("Game Screen");
-        stage.setScene(scene1);
-        stage.show();
-
-
+    public WelcomeScene(Emulator emulator) {
+        this.emulator = emulator;
+        labelFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(),
+                30);
+        label2Font = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(),
+                40);
+        buttonFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(),
+                14);
     }
+
     private Label buildlabel() {
 
         Label welcome = new Label("Welcome to ");
@@ -71,7 +66,7 @@ public class welcomeScene extends Application {
         load.setLayoutY(500);
         load.setOnAction(event -> {
             try {
-                filechooser();
+                fileChooser();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -80,7 +75,7 @@ public class welcomeScene extends Application {
         return load;
     }
 
-    private Scene createScene1() {
+    public Scene createScene() {
         Label welcome = buildlabel();
         Label jif = buildlabel2();
         Button load = buildbutton();
@@ -89,25 +84,31 @@ public class welcomeScene extends Application {
 
         gameScreen.getChildren().addAll(welcome, jif, load);
 
-        Scene scene1 = new Scene(gameScreen, 1000, 750);
+        Scene scene = new Scene(gameScreen, 1000, 750);
 
-        return scene1;
+        return scene;
 
     }
 
-    private File filechooser() throws IOException {
+    public Stage render(Stage stage) {
+        this.stage = stage;
+        stage.setTitle("JIF-8 Emulator");
+        stage.setScene(createScene());
+        return stage;
+    }
+
+    private File fileChooser() throws IOException {
 
         FileChooser fc = new FileChooser();
 
         File file = fc.showOpenDialog(stage);
-
-        Loader loader = new Loader();
-        loader.loadRom(file.getAbsolutePath());
-
-        return file;
+        if (file != null) {
+            emulator.loadRom(file.getAbsolutePath());
+            System.out.println("File loaded: " + file.getAbsolutePath());
+        } else {
+            System.out.println("File selection cancelled.");
         }
-
-    public static void main(String[] args) {
-        launch();
+        return file;
     }
+
 }

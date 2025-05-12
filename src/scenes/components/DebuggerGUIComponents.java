@@ -1,3 +1,5 @@
+package scenes.components;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -10,7 +12,7 @@ public class DebuggerGUIComponents {
     private final TextField[] stackFields = new TextField[64];
     private final TextField[] registerFields = new TextField[16];
     private final TextField[] specialRegisterFields = new TextField[5];
-    private final String[] specialRegisters = {"PC", "SP", "DT", "ST", " I"};
+    private final String[] specialRegisters = { "PC", "SP", "DT", "ST", " I" };
 
     private Font usedFont;
     private Font labelFont;
@@ -68,7 +70,8 @@ public class DebuggerGUIComponents {
         ScrollPane scrollPane = new ScrollPane(contentBox);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(250);
-        scrollPane.setStyle("-fx-background: rgb(24,20,20); -fx-background-color: rgb(24,20,20); -fx-border-color: white;");
+        scrollPane.setStyle(
+                "-fx-background: rgb(24,20,20); -fx-background-color: rgb(24,20,20); -fx-border-color: white;");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
         Label boxLabel = new Label(label);
@@ -100,7 +103,8 @@ public class DebuggerGUIComponents {
         }
 
         for (int i = 0; i < specialRegisters.length; i++) {
-            specialRegisterFields[i] = createStyledTextField(String.format("%s: %08X", specialRegisters[i], 0x00000000));
+            specialRegisterFields[i] = createStyledTextField(
+                    String.format("%s: %08X", specialRegisters[i], 0x00000000));
             registersGrid.add(specialRegisterFields[i], 2, i);
         }
 
@@ -123,7 +127,7 @@ public class DebuggerGUIComponents {
         Button loadButton = new Button("Load");
         Button memoryHexViewButton = new Button("Memory Hex View");
 
-        for (Button btn : new Button[]{startButton, pauseButton, resetButton, loadButton, memoryHexViewButton}) {
+        for (Button btn : new Button[] { startButton, pauseButton, resetButton, loadButton, memoryHexViewButton }) {
             btn.setMaxWidth(Double.MAX_VALUE);
             btn.setFont(buttonFont);
         }
