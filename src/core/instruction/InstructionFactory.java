@@ -26,6 +26,8 @@ public class InstructionFactory {
 
         switch (firstNibble) {
             case 0x0:
+                if (opcode == 0x0000)
+                    return initInstruction(new NopInstruction0000());
                 if (opcode == 0x00E0)
                     return initInstruction(new ClsInstruction00E0());
                 if (opcode == 0x00EE)
