@@ -3,25 +3,19 @@ package core.instruction.instructions;
 import core.instruction.Instruction;
 
 public class GDelayInstruction extends Instruction {
-    private final int delay;
+    private final int register;
 
-    public GDelayInstruction(int delay) {
-        super();
-        this.delay = delay;
+    public GDelayInstruction(int register) {
+        this.register = register;
     }
 
     @Override
     public void execute() {
-        cpu.setDelayTimer((byte)delay);
+        cpu.getRegisters().setRegister(register, cpu.getDelayTimer());
     }
 
     @Override
     public String toString() {
-        return "GDelay " + delay;
+        return String.format("LD V%X, DT", register);
     }
-
-    public int getDelay() {
-        return delay;
-    }
-
 }
