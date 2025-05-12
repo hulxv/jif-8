@@ -12,6 +12,7 @@ public class JmpInstruction extends Instruction {
     @Override
     public void execute() {
         // Implementation for jump operation
+        cpu.setPC(address);
     }
     
     public char getAddress() {

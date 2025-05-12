@@ -9,10 +9,7 @@ public class ClsInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Clear the display
-        System.out.println("Clearing the display");
-        // Assuming display is a field in the CPU class
-        // display.clear();
+        cpu.getDisplay().reset();
     }
 
     @Override

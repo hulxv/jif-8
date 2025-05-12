@@ -12,8 +12,8 @@ public class JsrInstruction extends Instruction {
     public void execute() {
         // Logic to call a subroutine
         System.out.println("Calling subroutine at address: " + address);
-        // Assuming stack is a field in the CPU class
-        // stack.push(address);
+        cpu.getStack().push(cpu.getPC());
+        cpu.setPC((char) address);
     }
 
     @Override

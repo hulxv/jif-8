@@ -2,7 +2,7 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class JmiInstruction extends Instruction{
+public class JmiInstruction extends Instruction {
     private int address;
 
     public JmiInstruction(int address) {
@@ -10,14 +10,12 @@ public class JmiInstruction extends Instruction{
     }
 
     public void execute() {
-        // Logic to jump to a memory address
-        System.out.println("Jumping to memory address: " + address);
-        // Assuming stack is a field in the CPU class
-        // stack.push(address);
+        int v0 = cpu.getRegisters().getRegister(0);
+        cpu.setPC((char) (v0 + address));
     }
 
     @Override
     public String toString() {
-        return "JMI " + String.format("%03X", address);
+        return String.format("JMI %03X", address);
     }
 }
