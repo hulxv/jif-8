@@ -84,7 +84,7 @@ public class InstructionFactory {
                 break;
 
             case 0xA:
-                return initInstruction(new MviInstruction(0, nnn));
+                return initInstruction(new MviInstruction(nnn));
 
             case 0xB:
                 return initInstruction(new JmiInstruction(nnn));
