@@ -12,10 +12,9 @@ public class MovInstruction extends Instruction {
     }
 
     public void execute() {
-        // Logic to move data from one register to another
-        System.out.println("Moving data from register " + sourceRegister + " to register " + destinationRegister);
-        // Assuming registers is a field in the CPU class
-        // registers[destinationRegister] = registers[sourceRegister];
+        byte source = cpu.getRegisters().getRegister(sourceRegister);
+        System.out.println("Moving data from register " + sourceRegister + " to register " + destinationRegister); //see if you will need it for testing or delete it
+        cpu.getRegisters().setRegister(destinationRegister, source);
     }
 
     @Override

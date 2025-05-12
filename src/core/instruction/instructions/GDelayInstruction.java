@@ -12,10 +12,7 @@ public class GDelayInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Logic to set the delay
-        System.out.println("Setting delay to " + delay);
-        // Assuming there's a method in the CPU class to set the delay
-        // cpu.setDelay(delay);
+        cpu.setDelayTimer((byte)delay);
     }
 
     @Override

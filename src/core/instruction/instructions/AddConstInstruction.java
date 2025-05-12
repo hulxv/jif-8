@@ -13,8 +13,9 @@ public class AddConstInstruction extends Instruction {
 
     @Override
     public void execute() {
-        // Add value to register Vx
-        System.out.printf("ADD V%X, %02X\n", register, value);
+        int current = cpu.getRegisters().getRegister(register) & 0xFF;
+        int res = (value+current) & 0xFF;
+        cpu.getRegisters().setRegister(register,(byte) res);
     }
 
     @Override
