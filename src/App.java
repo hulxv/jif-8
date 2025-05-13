@@ -1,5 +1,6 @@
 import core.Emulator;
 import scenes.GameScene;
+import scenes.WelcomeScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -8,9 +9,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // WelcomeScene welcome = new WelcomeScene(emulator);
-        // Stage welcomeStage = welcome.render(new Stage());
-        // welcomeStage.show();
+        WelcomeScene welcome = new WelcomeScene(emulator, new Stage());
+        Stage welcomeStage = welcome.render();
+        welcomeStage.showAndWait();
         GameScene gameScene = new GameScene(emulator);
         Stage gameStage = gameScene.render(new Stage());
         gameStage.show();

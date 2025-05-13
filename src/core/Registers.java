@@ -2,9 +2,9 @@ package core;
 
 public class Registers {
     private byte[] registers;
-
+    private static final int NUM_REGISTERS = 16;
     public Registers() {
-        registers = new byte[16]; 
+        registers = new byte[NUM_REGISTERS]; 
         for (int i = 0; i < registers.length; i++) {
             registers[i] = 0;
         }
@@ -27,6 +27,10 @@ public class Registers {
         for (int i = 0; i < registers.length; i++) {
             registers[i] = 0;
         }
+    }
+
+    public int getSize() {
+        return NUM_REGISTERS;
     }
 
 }

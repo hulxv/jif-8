@@ -1,5 +1,10 @@
 package scenes.components;
 
+import java.util.HashMap;
+
+import core.CPU;
+import core.Emulator;
+import core.Registers;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -8,17 +13,26 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
 public class DebuggerGUIComponents {
+    private static Emulator emu;
     private final TextField[] memoryFields = new TextField[256];
     private final TextField[] stackFields = new TextField[64];
-    private final TextField[] registerFields = new TextField[16];
-    private final TextField[] specialRegisterFields = new TextField[5];
-    private final String[] specialRegisters = { "PC", "SP", "DT", "ST", " I" };
+    private HashMap<String, Number> specialRegisters = new HashMap<>();
+
+    // private final String[] specialRegisters = { "PC", "SP", "DT", "ST", " I" };
 
     private Font usedFont;
     private Font labelFont;
     private Font buttonFont;
 
-    public DebuggerGUIComponents() {
+    public DebuggerGUIComponents(Emulator emulator) {
+        emu = emulator;
+        CPU cpu = emu.getCPU();
+        specialRegisters.put(" I", (int) cpu.getI());
+        specialRegisters.put("PC", (int) cpu.getPC());
+        specialRegisters.put("DT", (int) cpu.getDelayTimer());
+        specialRegisters.put("ST", (int) cpu.getSoundTimer());
+        specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
+
         initializeFonts();
     }
 
@@ -97,15 +111,18 @@ public class DebuggerGUIComponents {
         registersGrid.setVgap(5);
         registersGrid.setPadding(new Insets(5));
 
-        for (int i = 0; i < 16; i++) {
-            registerFields[i] = createStyledTextField(String.format("V%X: %08X", i, 0x00000000));
-            registersGrid.add(registerFields[i], i % 2, i / 2);
+        for (int i = 0; i < emu.getCPU().getRegisters().getSize(); i++) {
+            registersGrid.add(
+                    createStyledTextField(
+                            String.format("V%X: %08X", i, emu.getCPU().getRegisters().getRegister(i)))
+
+                    , i % 2, i / 2);
         }
 
-        for (int i = 0; i < specialRegisters.length; i++) {
-            specialRegisterFields[i] = createStyledTextField(
-                    String.format("%s: %08X", specialRegisters[i], 0x00000000));
-            registersGrid.add(specialRegisterFields[i], 2, i);
+        for (int i = 0; i < specialRegisters.size(); i++) {
+            String k = (String) specialRegisters.keySet().toArray()[i];
+            registersGrid.add(
+                    createStyledTextField(String.format("%s: %08X", k, specialRegisters.get(k))), 2, i);
         }
 
         ScrollPane registersScroll = new ScrollPane(registersGrid);

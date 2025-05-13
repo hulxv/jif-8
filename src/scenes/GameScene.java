@@ -20,7 +20,7 @@ public class GameScene {
     public Stage render(Stage stage) {
         stage.setTitle("JIF-8 Runner");
         stage.show();
-        DebuggerGUIComponents debuggerGUIComponents = new DebuggerGUIComponents();
+        DebuggerGUIComponents debuggerGUIComponents = new DebuggerGUIComponents(emu);
 
         VBox contentBox = debuggerGUIComponents.buildContentBox();
         contentBox.setMinWidth(350);

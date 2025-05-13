@@ -24,7 +24,8 @@ public class WelcomeScene {
 
     private Emulator emulator;
 
-    public WelcomeScene(Emulator emulator) {
+    public WelcomeScene(Emulator emulator, Stage stage) {
+        this.stage = stage;
         this.emulator = emulator;
         labelFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(),
                 30);
@@ -34,36 +35,28 @@ public class WelcomeScene {
                 14);
     }
 
-    private Label buildlabel() {
+    private Label buildWelcomeLabel() {
 
         Label welcome = new Label("Welcome to ");
         welcome.setFont(labelFont);
         welcome.setTextFill(Color.web("#24e804"));
-        welcome.setLayoutX(360);
-        welcome.setLayoutY(200);
-        welcome.setPrefSize(600, 50);
 
         return welcome;
     }
 
-    private Label buildlabel2() {
+    private Label buildJif8Label() {
 
-        Label jif = new Label("JIF-8 ");
+        Label jif = new Label("JIF-8 Emulator");
         jif.setFont(label2Font);
         jif.setTextFill(Color.web("#24e804"));
-        jif.setLayoutX(400);
-        jif.setLayoutY(270);
-        jif.setPrefSize(700, 100);
 
         return jif;
     }
 
-    private Button buildbutton() {
+    private Button buildLoadbutton() {
 
         Button load = new Button("LOAD GAME");
         load.setFont(buttonFont);
-        load.setLayoutX(430);
-        load.setLayoutY(500);
         load.setOnAction(event -> {
             try {
                 fileChooser();
@@ -76,22 +69,21 @@ public class WelcomeScene {
     }
 
     public Scene createScene() {
-        Label welcome = buildlabel();
-        Label jif = buildlabel2();
-        Button load = buildbutton();
-        AnchorPane gameScreen = new AnchorPane();
+        Label welcome = buildWelcomeLabel();
+        Label jif = buildJif8Label();
+        Button load = buildLoadbutton();
+        VBox gameScreen = new VBox(welcome, jif, load);
+        gameScreen.setSpacing(20);
         gameScreen.setStyle("-fx-background-color: rgba(33,32,32,1);");
+        gameScreen.setAlignment(javafx.geometry.Pos.CENTER);
 
-        gameScreen.getChildren().addAll(welcome, jif, load);
-
-        Scene scene = new Scene(gameScreen, 1000, 750);
+        Scene scene = new Scene(gameScreen);
 
         return scene;
 
     }
 
-    public Stage render(Stage stage) {
-        this.stage = stage;
+    public Stage render() {
         stage.setTitle("JIF-8 Emulator");
         stage.setScene(createScene());
         return stage;
@@ -105,6 +97,7 @@ public class WelcomeScene {
         if (file != null) {
             emulator.loadRom(file.getAbsolutePath());
             System.out.println("File loaded: " + file.getAbsolutePath());
+            stage.close();
         } else {
             System.out.println("File selection cancelled.");
         }

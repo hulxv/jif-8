@@ -29,6 +29,9 @@ public class Stack {
         return stack[stackPointer];
     }
 
+    public char getStackPointer() {
+        return stackPointer;
+    }
     public void reset() {
         for (int i = 0; i < stack.length; i++) {
             stack[i] = 0;
