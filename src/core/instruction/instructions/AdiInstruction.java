@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class AdiInstruction extends Instruction {
+public class AdiInstructionFX1E extends Instruction {
     private final int register;
 
-    public AdiInstruction(int register) {
+    public AdiInstructionFX1E(int register) {
         this.register = register;
     }
 
