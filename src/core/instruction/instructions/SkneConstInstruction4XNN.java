@@ -18,7 +18,7 @@ public class SkneConstInstruction4XNN extends Instruction {
         char PC = cpu.getPC();
         char PCNewValue = (char) (PC + 2);
 
-        if (valueX == (byte) value)
+        if (valueX != (byte) value)
             cpu.setPC(PCNewValue);
     }
 
