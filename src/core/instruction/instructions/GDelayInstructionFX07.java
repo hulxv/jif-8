@@ -16,6 +16,6 @@ public class GDelayInstructionFX07 extends Instruction {
 
     @Override
     public String toString() {
-        return "GDelay " + delay;
+        return "GDelay " + cpu.getDelayTimer();
     }
 }
