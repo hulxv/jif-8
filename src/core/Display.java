@@ -5,8 +5,9 @@ import java.util.Arrays;
 public class Display {
 
     private boolean[][] pixels;
-    public static final int WIDTH = 64;
-    public static final int HEIGHT = 32;
+    private static final int width = 64;
+    private static final int height = 32;
+  
     public boolean drawFlag = false;
 
     public Display() {
@@ -26,23 +27,31 @@ public class Display {
     }
 
     public void reset() {
-        pixels = new boolean[WIDTH][HEIGHT];
+        pixels = new boolean[width][height];
     }
 
     public void setPixel(int x, int y, boolean value) {
-        if (x < WIDTH && x >= 0 && y < HEIGHT && y >= 0) {
+        if (x < height && x >= 0 && y < width && y >= 0) {
             pixels[x][y] = value;
         }
     }
 
     public boolean getPixel(int x, int y) {
-        if (x < WIDTH && x >= 0 && y < HEIGHT && y >= 0) {
+        if (x < width && x >= 0 && y < height && y >= 0) {
             return pixels[x][y];
         }
-        throw new IndexOutOfBoundsException("Invalid Pixle Coordinates");
+        throw new IndexOutOfBoundsException("Invalid Pixel Coordinates");
     }
 
     public boolean[][] getDisplayBuffer() {
         return pixels;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

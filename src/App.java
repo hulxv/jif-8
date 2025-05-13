@@ -1,12 +1,6 @@
-import core.CPU;
 import core.Emulator;
 import scenes.GameScene;
-import scenes.WelcomeScene;
 import javafx.application.Application;
-import javafx.geometry.Orientation;
-import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -14,9 +8,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        WelcomeScene welcome = new WelcomeScene(emulator);
-        Stage welcomeStage = welcome.render(new Stage());
-        welcomeStage.show();
+        // WelcomeScene welcome = new WelcomeScene(emulator);
+        // Stage welcomeStage = welcome.render(new Stage());
+        // welcomeStage.show();
         GameScene gameScene = new GameScene(emulator);
         Stage gameStage = gameScene.render(new Stage());
         gameStage.show();

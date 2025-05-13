@@ -45,4 +45,7 @@ public class Emulator {
         cpu.cycle();
     }
 
+    public CPU getCPU() {
+        return cpu;
+    }
 }

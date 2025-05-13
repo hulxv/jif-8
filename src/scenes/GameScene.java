@@ -1,19 +1,20 @@
 package scenes;
 
+import core.Display;
 import core.Emulator;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import scenes.components.DebuggerGUIComponents;
 
 public class GameScene {
-    private static Emulator emulator;
+    private static Emulator emu;
 
     public GameScene(Emulator emulator) {
-        this.emulator = emulator;
+        emu = emulator;
     }
 
     public Stage render(Stage stage) {
@@ -23,17 +24,23 @@ public class GameScene {
 
         VBox contentBox = debuggerGUIComponents.buildContentBox();
         contentBox.setMinWidth(350);
-        contentBox.setMaxWidth(350);
 
-        AnchorPane gameScreen = new AnchorPane();
-        gameScreen.setStyle("-fx-background-color: rgba(33,32,32,1);");
+        Display display = emu.getCPU().getDisplay();
+        GameDisplay gDisplay = new GameDisplay(display, 20);
 
-        SplitPane contentSplit = new SplitPane(gameScreen, contentBox);
+        BorderPane gameScreenPane = new BorderPane(gDisplay.getCanvas());
+
+        gameScreenPane.setStyle("-fx-background-color: rgba(33,32,32,1);");
+
+        gameScreenPane.setMinWidth(gDisplay.getWidth());
+
+        SplitPane contentSplit = new SplitPane(gameScreenPane, contentBox);
         contentSplit.setOrientation(Orientation.HORIZONTAL);
         contentSplit.setDividerPositions(0.66);
 
         Scene scene = new Scene(contentSplit, 1000, 750);
         stage.setScene(scene);
+        stage.setResizable(true);
 
         return stage;
     }
