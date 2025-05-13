@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class MovInstruction extends Instruction {
+public class MovInstruction8XY0 extends Instruction {
     private int sourceRegister;
     private int destinationRegister;
 
-    public MovInstruction(int sourceRegister, int destinationRegister) {
+    public MovInstruction8XY0(int sourceRegister, int destinationRegister) {
         this.sourceRegister = sourceRegister;
         this.destinationRegister = destinationRegister;
     }
