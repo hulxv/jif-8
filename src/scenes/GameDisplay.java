@@ -1,5 +1,7 @@
 package scenes;
 
+import java.util.Stack;
+
 import core.Display;
 import javafx.application.Application;
 import javafx.scene.Node;
@@ -11,49 +13,36 @@ import javafx.stage.Stage;
 
 public class GameDisplay extends Canvas {
 
-    private Canvas canvas;
-    private StackPane box;
+    private GraphicsContext gc;
     private static Display display;
-    private boolean[][] pixels;
-    private int scale;
-    private int height;
-    private int width;
+    private int scale = 10;
 
-    public GameDisplay(Display display) {
-        this.display = display;
-        display.clear();
+    public GameDisplay(Display _display, int scale) {
+        super(display.getWidth() * scale, display.getHeight() * scale);
+        this.gc = getGraphicsContext2D();
+        this.scale = scale;
+        display = _display;
     }
 
     public void setScale(int Scale) {
-
         this.scale = Scale;
     }
 
-    public void buildscreen() {
-        this.canvas = new Canvas(width * scale, height * scale);
-
-        this.box = new StackPane(canvas);
-        box.setStyle("-fx-background-color: rgba(33,32,32,1);");
-
+    public Canvas getCanvas() {
         render();
-
-    }
-
-    public Node getGameScreen() {
-
-        return box;
+        return this;
     }
 
     public void render() {
-        GraphicsContext gc = getGraphicsContext2D();
+        boolean[][] pixels = display.getDisplayBuffer();
 
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, getWidth(), getHeight());
 
         // Draw active pixels
         gc.setFill(Color.WHITE);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < display.getWidth(); x++) {
+            for (int y = 0; y < display.getHeight(); y++) {
                 if (pixels[x][y]) {
                     gc.fillRect(x * scale, y * scale, scale, scale);
                 }
