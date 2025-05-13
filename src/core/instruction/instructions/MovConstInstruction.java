@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class MovConstInstruction extends Instruction {
+public class MovConstInstruction6XNN extends Instruction {
     private final int register;
     private final int value;
 
-    public MovConstInstruction(int register, int value) {
+    public MovConstInstruction6XNN(int register, int value) {
         this.register = register;
         this.value = value;
     }
