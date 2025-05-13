@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class BcdInstruction extends Instruction {
+public class BcdInstructionFX33 extends Instruction {
     private final int register;
 
-    public BcdInstruction(int register) {
+    public BcdInstructionFX33(int register) {
         this.register = register;
     }
 

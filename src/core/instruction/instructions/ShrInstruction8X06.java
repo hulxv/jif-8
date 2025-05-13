@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class ShrInstruction extends Instruction {
+public class ShrInstruction8X06 extends Instruction {
     private final int register;
 
-    public ShrInstruction(int register) {
+    public ShrInstruction8X06(int register) {
         this.register = register;
     }
 

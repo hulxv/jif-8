@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SkprInstruction extends Instruction {
+public class SkprInstructionEX9E extends Instruction {
     private final int register;
 
-    public SkprInstruction(int register) {
+    public SkprInstructionEX9E(int register) {
         this.register = register;
     }
 

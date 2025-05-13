@@ -14,7 +14,7 @@ public class AdiInstructionFX1E extends Instruction {
         int value = cpu.getRegisters().getRegister(register) & 0xFF;
         int index = cpu.getI() & 0xFFFF;
 
-        int res = (value+index);
+        int res = (value + index);
         byte carryFlag = (res > 0xFFFF ? (byte)1 : (byte)0);
 
         cpu.setI((char) (res& 0xFFFF));

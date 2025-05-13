@@ -15,10 +15,6 @@ public class SSoundInstructionFX18 extends Instruction {
         cpu.setSoundTimer(value);
     }
 
-    public char getAddress() {
-        return address;
-    }
-
     @Override
     public String toString() {
         return "SSOUND " + address;

@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SkupPressedInstruction extends Instruction {
+public class SkupPressedInstructionEXA1 extends Instruction {
     private final int register;
 
-    public SkupPressedInstruction(int register) {
+    public SkupPressedInstructionEXA1(int register) {
         this.register = register;
     }
 

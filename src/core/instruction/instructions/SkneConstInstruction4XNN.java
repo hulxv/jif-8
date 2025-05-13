@@ -2,28 +2,28 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SkeqConstInstruction extends Instruction {
+public class SkneConstInstruction4XNN extends Instruction {
     private final int register;
     private final int value;
 
-    public SkeqConstInstruction(int register, int value) {
+    public SkneConstInstruction4XNN(int register, int value) {
         this.register = register;
         this.value = value;
     }
 
     @Override
     public void execute() {
-        // Implementation will skip next instruction if VX equals NN
+        // Implementation will skip next instruction if VX not equals NN
         byte valueX = cpu.getRegisters().getRegister(register);
         char PC = cpu.getPC();
         char PCNewValue = (char) (PC + 2);
 
-        if (valueX == (byte) value) 
+        if (valueX == (byte) value)
             cpu.setPC(PCNewValue);
     }
 
     @Override
     public String toString() {
-        return String.format("SE V%X, %X", register, value);
+        return String.format("SKNE V%X, %X", register, value);
     }
 }

@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class KeyInstruction extends Instruction {
+public class KeyInstructionFX0A extends Instruction {
     private final int register;
 
-    public KeyInstruction(int register) {
+    public KeyInstructionFX0A(int register) {
         this.register = register;
     }
 

@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class OrInstruction extends Instruction {
+public class OrInstruction8XY1 extends Instruction {
     private final int registerX;
     private final int registerY;
 
-    public OrInstruction(int rx, int ry) {
+    public OrInstruction8XY1(int rx, int ry) {
         this.registerX = rx;
         this.registerY = ry;
     }

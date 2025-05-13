@@ -16,6 +16,6 @@ public class GDelayInstructionFX07 extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("LD V%X, DT", register);
+        return "GDelay " + delay;
     }
 }

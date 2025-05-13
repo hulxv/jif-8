@@ -18,6 +18,6 @@ public class MovConstInstruction6XNN extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("LD V%X, %02X", register, value);
+        return String.format("MOV V%X, %02X", register, value);
     }
 }
