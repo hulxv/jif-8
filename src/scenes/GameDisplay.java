@@ -2,13 +2,17 @@ package scenes;
 
 import core.Display;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GameDisplay extends Canvas {
 
+    private Canvas canvas;
+    private StackPane box;
     private static Display display;
     private boolean[][] pixels;
     private int scale;
@@ -17,38 +21,27 @@ public class GameDisplay extends Canvas {
 
     public GameDisplay(Display display) {
         this.display = display;
+        display.clear();
     }
 
-
-    public void DisplayScale(boolean[][] pixels,int Width , int Height , int Scale){
+    public void setScale(int Scale) {
 
         this.scale = Scale;
-        this.width = Width;
-        this.height = Height;
-        this.pixels = display.getDisplayBuffer();
-        setWidth (width * scale);
-        setHeight  (height * scale);
+    }
+
+    public void buildscreen() {
+        this.canvas = new Canvas(width * scale, height * scale);
+
+        this.box = new StackPane(canvas);
+        box.setStyle("-fx-background-color: rgba(33,32,32,1);");
+
+        render();
 
     }
 
-    public void clear(){
-        for (int x = 0 ; x < width ; x++){
-            for (int y = 0 ; y < height ; y++){
-                display.setPixel(x , y , false);
-            }
-        }
-        GraphicsContext gc = getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0 , 0 , getWidth(), getHeight());
-    }
+    public Node getGameScreen() {
 
-    public boolean drawPixel(int x , int y){
-        x = x % width;
-        y = y % height;
-
-        pixels[x][y] ^= true;
-
-        return !pixels[x][y];
+        return box;
     }
 
     public void render() {
@@ -68,29 +61,4 @@ public class GameDisplay extends Canvas {
         }
     }
 
-
-
-
-
-
-    @Override
-    public void start(Stage primaryStage) {
-
-    }
-    public void main(String[] args) {launch(args);
-    }
-
-
-      public void setWidth(int width){
-         this.width = width;}
-
-    public void setHeight(int height){
-        this.height = height;}
-
-
-
 }
-
-
-
-

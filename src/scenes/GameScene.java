@@ -24,9 +24,13 @@ public class GameScene {
         VBox contentBox = debuggerGUIComponents.buildContentBox();
         contentBox.setMinWidth(350);
         contentBox.setMaxWidth(350);
-
-        AnchorPane gameScreen = new AnchorPane();
+           
+        GameDisplay gDisplay = new GameDisplay(emulator.getCpu().getDisplay()); 
+        AnchorPane gameScreen = new AnchorPane(gDisplay.getGameScreen());
+              
         gameScreen.setStyle("-fx-background-color: rgba(33,32,32,1);");
+
+        gameScreen.setMinWidth(650);
 
         SplitPane contentSplit = new SplitPane(gameScreen, contentBox);
         contentSplit.setOrientation(Orientation.HORIZONTAL);
