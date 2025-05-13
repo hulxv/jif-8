@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SSoundInstruction extends Instruction {
+public class SSoundInstructionFX18 extends Instruction {
     private final char address;
 
-    public SSoundInstruction(char address) {
+    public SSoundInstructionFX18(char address) {
         this.address = address;
     }
 
