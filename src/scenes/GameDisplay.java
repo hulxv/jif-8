@@ -17,11 +17,11 @@ public class GameDisplay extends Canvas {
     private static Display display;
     private int scale = 10;
 
-    public GameDisplay(Display _display, int scale) {
+    public GameDisplay(Display display, int scale) {
         super(display.getWidth() * scale, display.getHeight() * scale);
         this.gc = getGraphicsContext2D();
         this.scale = scale;
-        display = _display;
+        this.display = display;
     }
 
     public void setScale(int Scale) {
