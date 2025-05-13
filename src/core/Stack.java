@@ -1,25 +1,32 @@
 package core;
 
-
 public class Stack {
-    private short[] stack;
-    private short stackPointer = 0;
+    private char[] stack;
+    private char stackPointer = 0;
 
     public Stack() {
-        stack = new short[16]; 
+        stack = new char[16];
         for (int i = 0; i < stack.length; i++) {
             stack[i] = 0;
         }
         System.out.println("Stack initialized");
     }
-    public void push(short value) {
-        if(stackPointer + 1 < 16)
+
+    public void push(char value) {
+        if (stackPointer + 1 < 16)
             stack[stackPointer++] = value;
     }
 
-    public void pop() {
-        if(stackPointer - 1 >= 0)
-            stack[--stackPointer] = 0;
+    public char pop() {
+        char value = getLast();
+        if (stackPointer - 1 >= 0)
+            stack[stackPointer] = 0;
+        stackPointer--;
+        return value;
+    }
+
+    public char getLast() {
+        return stack[stackPointer];
     }
 
     public void reset() {

@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Arrays;
+
 public class Display {
 
     private boolean[][] pixels;
@@ -9,17 +11,33 @@ public class Display {
     public Display() {
         pixels = new boolean[width][height];
     }
+  
+    public static final int WIDTH = 64;
+    public static final int HEIGHT = 32;
+    public boolean drawFlag = false;
 
-    public void clear() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                pixels[i][j] = false;
-            }
-        }
+    public Display() {
+        reset();
+    }
+
+    public boolean getDrawFlag() {
+        return drawFlag;
+    }
+
+    public void setDrawFlag() {
+        drawFlag = true;
+    }
+
+    public void clearDrawFlag() {
+        drawFlag = false;
+    }
+
+    public void reset() {
+        pixels = new boolean[WIDTH][HEIGHT];
     }
 
     public void setPixel(int x, int y, boolean value) {
-        if (x < width && x >= 0 && y < height && y >= 0) {
+        if (x < WIDTH && x >= 0 && y < HEIGHT && y >= 0) {
             pixels[x][y] = value;
         }
     }
