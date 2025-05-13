@@ -3,28 +3,19 @@ package core.instruction.instructions;
 import core.instruction.Instruction;
 
 public class GDelayInstructionFX07 extends Instruction {
-    private final int delay;
+    private final int register;
 
-    public GDelayInstructionFX07(int delay) {
-        super();
-        this.delay = delay;
+    public GDelayInstructionFX07(int register) {
+        this.register = register;
     }
 
     @Override
     public void execute() {
-        // Logic to set the delay
-        System.out.println("Setting delay to " + delay);
-        // Assuming there's a method in the CPU class to set the delay
-        // cpu.setDelay(delay);
+        cpu.getRegisters().setRegister(register, cpu.getDelayTimer());
     }
 
     @Override
     public String toString() {
         return "GDelay " + delay;
     }
-
-    public int getDelay() {
-        return delay;
-    }
-
 }
