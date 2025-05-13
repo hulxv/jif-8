@@ -2,10 +2,10 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class SDelayInstruction extends Instruction {
+public class SDelayInstructionFX15 extends Instruction {
     private final int register;
 
-    public SDelayInstruction(int register) {
+    public SDelayInstructionFX15(int register) {
         this.register = register;
     }
 
