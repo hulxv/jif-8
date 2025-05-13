@@ -26,104 +26,106 @@ public class InstructionFactory {
 
         switch (firstNibble) {
             case 0x0:
+                if (opcode == 0x0000)
+                    return initInstruction(new NopInstruction0000());
                 if (opcode == 0x00E0)
-                    return initInstruction(new ClsInstruction());
+                    return initInstruction(new ClsInstruction00E0());
                 if (opcode == 0x00EE)
-                    return initInstruction(new RtsInstruction());
+                    return initInstruction(new RtsInstruction00EE());
                 break;
 
             case 0x1:
-                return initInstruction(new JmpInstruction((char) nnn));
+                return initInstruction(new JmpInstruction1NNN((char) nnn));
 
             case 0x2:
-                return initInstruction(new JsrInstruction(nnn));
+                return initInstruction(new JsrInstruction2NNN(nnn));
 
             case 0x3:
-                return initInstruction(new SkeqConstInstruction(x, nn));
+                return initInstruction(new SkeqConstInstruction3XNN(x, nn));
 
             case 0x4:
-                return initInstruction(new SkneConstInstruction(x, nn));
+                return initInstruction(new SkneConstInstruction4XNN(x, nn));
 
             case 0x5:
                 if (n == 0)
-                    return initInstruction(new SkeqInstruction(x, y));
+                    return initInstruction(new SkeqInstruction5XY0(x, y));
                 break;
 
             case 0x6:
-                return initInstruction(new MovConstInstruction(x, nn));
+                return initInstruction(new MovConstInstruction6XNN(x, nn));
 
             case 0x7:
-                return initInstruction(new AddConstInstruction(x, nn));
+                return initInstruction(new AddConstInstruction7XNN(x, nn));
 
             case 0x8:
                 switch (n) {
                     case 0x0:
-                        return initInstruction(new MovInstruction(y, x));
+                        return initInstruction(new MovInstruction8XY0(y, x));
                     case 0x1:
-                        return initInstruction(new OrInstruction(x, y));
+                        return initInstruction(new OrInstruction8XY1(x, y));
                     case 0x2:
-                        return initInstruction(new AndInstruction(x, y));
+                        return initInstruction(new AndInstruction8XY2(x, y));
                     case 0x3:
-                        return initInstruction(new XorInstruction(x, y));
+                        return initInstruction(new XorInstruction8XY3(x, y));
                     case 0x4:
-                        return initInstruction(new AddInstruction(x, y));
+                        return initInstruction(new AddInstruction8XY4(x, y));
                     case 0x5:
-                        return initInstruction(new SubInstruction(x, y));
+                        return initInstruction(new SubInstruction8XY5(x, y));
                     case 0x6:
-                        return initInstruction(new ShrInstruction(x));
+                        return initInstruction(new ShrInstruction8X06(x));
                     case 0x7:
-                        return initInstruction(new RsbInstruction(x, y));
+                        return initInstruction(new RsbInstruction8XY7(x, y));
                     case 0xE:
-                        return initInstruction(new ShlInstruction(x));
+                        return initInstruction(new ShlInstruction8X0E(x));
                 }
                 break;
 
             case 0x9:
                 if ((opcode & 0x000F) == 0)
-                    return initInstruction(new SkneInstruction(x, y));
+                    return initInstruction(new SkneInstruction9XY0(x, y));
                 break;
 
             case 0xA:
-                return initInstruction(new MviInstruction(nnn));
+                return initInstruction(new MviInstructionANNN(nnn));
 
             case 0xB:
-                return initInstruction(new JmiInstruction(nnn));
+                return initInstruction(new JmiInstructionBNNN(nnn));
 
             case 0xC:
-                return initInstruction(new RandInstruction(x, nn));
+                return initInstruction(new RandInstructionCXNN(x, nn));
 
             case 0xD:
-                return initInstruction(new SpriteInstruction(x, y, n));
+                return initInstruction(new SpriteInstructionDXY0(x, y, n));
 
             case 0xE:
                 switch (nn) {
                     case 0x9E:
-                        return initInstruction(new SkprInstruction(x));
+                        return initInstruction(new SkprInstructionEX9E(x));
                     case 0xA1:
-                        return initInstruction(new SkupPressedInstruction(x));
+                        return initInstruction(new SkupPressedInstructionEXA1(x));
                 }
                 break;
 
             case 0xF:
                 switch (nn) {
                     case 0x07:
-                        return initInstruction(new GDelayInstruction(x));
+                        return initInstruction(new GDelayInstructionFX07(x));
                     case 0x0A:
-                        return initInstruction(new KeyInstruction(x));
+                        return initInstruction(new KeyInstructionFX0A(x));
                     case 0x15:
-                        return initInstruction(new SDelayInstruction(x));
+                        return initInstruction(new SDelayInstructionFX15(x));
                     case 0x18:
-                        return initInstruction(new SSoundInstruction((char) x));
+                        return initInstruction(new SSoundInstructionFX18((char) x));
                     case 0x1E:
-                        return initInstruction(new AdiInstruction(x));
+                        return initInstruction(new AdiInstructionFX1E(x));
                     case 0x29:
-                        return initInstruction(new FontInstruction(x));
+                        return initInstruction(new FontInstructionFX29(x));
                     case 0x33:
-                        return initInstruction(new BcdInstruction(x));
+                        return initInstruction(new BcdInstructionFX33(x));
                     case 0x55:
-                        return initInstruction(new StrInstruction(x));
+                        return initInstruction(new StrInstructionFX55(x));
                     case 0x65:
-                        return initInstruction(new LdrInstruction(x));
+                        return initInstruction(new LdrInstructionFX65(x));
                 }
                 break;
         }
