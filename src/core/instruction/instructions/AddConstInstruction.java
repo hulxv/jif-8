@@ -2,11 +2,11 @@ package core.instruction.instructions;
 
 import core.instruction.Instruction;
 
-public class AddConstInstruction extends Instruction {
+public class AddConstInstruction7XNN extends Instruction {
     private final int register;
     private final int value;
 
-    public AddConstInstruction(int register, int value) {
+    public AddConstInstruction7XNN(int register, int value) {
         this.register = register;
         this.value = value;
     }
