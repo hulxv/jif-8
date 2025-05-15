@@ -1,24 +1,27 @@
 package scenes.components;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import core.CPU;
 import core.Emulator;
-import core.Registers;
+import core.Memory;
+import core.Stack;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class DebuggerGUIComponents {
     private static Emulator emu;
-    private final TextField[] memoryFields = new TextField[256];
-    private final TextField[] stackFields = new TextField[64];
+    private final TextField[] memoryFields = new TextField[Memory.MEMORY_SIZE];
+    private final TextField[] stackFields = new TextField[Stack.STACK_SIZE];
     private HashMap<String, Number> specialRegisters = new HashMap<>();
-
-    // private final String[] specialRegisters = { "PC", "SP", "DT", "ST", " I" };
 
     private Font usedFont;
     private Font labelFont;
@@ -33,6 +36,12 @@ public class DebuggerGUIComponents {
         specialRegisters.put("ST", (int) cpu.getSoundTimer());
         specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
 
+        for (int i = 0; i < memoryFields.length; i++) {
+            memoryFields[i] = createStyledTextField(String.format("0x%03X: 0x%02X", i, cpu.getMemory().get(i)));
+        }
+        for (int i = 0; i < stackFields.length; i++) {
+            stackFields[i] = createStyledTextField(String.format("0x%03X: 0x%04X", i, (int) cpu.getStack().get(i)));
+        }
         initializeFonts();
     }
 
@@ -59,8 +68,8 @@ public class DebuggerGUIComponents {
     }
 
     private SplitPane buildMemoryAndStackBoxes() {
-        VBox memoryBox = buildSectionBox(memoryFields, "Memory", 256);
-        VBox stackBox = buildSectionBox(stackFields, "Stack", 16);
+        VBox memoryBox = buildSectionBox(memoryFields, "Memory");
+        VBox stackBox = buildSectionBox(stackFields, "Stack");
 
         SplitPane memoryAndStackBox = new SplitPane(memoryBox, stackBox);
         memoryAndStackBox.setOrientation(Orientation.HORIZONTAL);
@@ -70,13 +79,12 @@ public class DebuggerGUIComponents {
         return memoryAndStackBox;
     }
 
-    private VBox buildSectionBox(TextField[] fields, String label, int count) {
+    private VBox buildSectionBox(TextField[] fields, String label) {
         VBox contentBox = new VBox(5);
         contentBox.setPadding(new Insets(5));
         contentBox.setStyle("-fx-background-color: rgb(24,20,20);");
 
-        for (int i = 0; i < count; i++) {
-            fields[i] = createStyledTextField(String.format("0x%03X: %08X", i, 0x00000000));
+        for (int i = 0; i < fields.length; i++) {
             fields[i].setFont(usedFont);
             contentBox.getChildren().add(fields[i]);
         }
@@ -114,15 +122,14 @@ public class DebuggerGUIComponents {
         for (int i = 0; i < emu.getCPU().getRegisters().getSize(); i++) {
             registersGrid.add(
                     createStyledTextField(
-                            String.format("V%X: %08X", i, emu.getCPU().getRegisters().getRegister(i)))
-
-                    , i % 2, i / 2);
+                            String.format("V%X: 0x%03X", i, emu.getCPU().getRegisters().getRegister(i))),
+                    i % 2, i / 2);
         }
 
         for (int i = 0; i < specialRegisters.size(); i++) {
             String k = (String) specialRegisters.keySet().toArray()[i];
             registersGrid.add(
-                    createStyledTextField(String.format("%s: %08X", k, specialRegisters.get(k))), 2, i);
+                    createStyledTextField(String.format("%s: 0x%03X", k, specialRegisters.get(k))), 2, i);
         }
 
         ScrollPane registersScroll = new ScrollPane(registersGrid);
@@ -178,6 +185,14 @@ public class DebuggerGUIComponents {
         VBox buttonBox = new VBox(buttonBar);
         VBox.setVgrow(buttonBox, Priority.NEVER);
 
+        loadButton.setOnAction(event -> {
+            try {
+                fileChooser();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         return buttonBox;
     }
 
@@ -189,4 +204,39 @@ public class DebuggerGUIComponents {
         textField.setFont(usedFont);
         return textField;
     }
+
+    public void updateDebugInfo() {
+        CPU cpu = emu.getCPU();
+
+        specialRegisters.put(" I", (int) cpu.getI());
+        specialRegisters.put("PC", (int) cpu.getPC());
+        specialRegisters.put("DT", (int) cpu.getDelayTimer());
+        specialRegisters.put("ST", (int) cpu.getSoundTimer());
+        specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
+
+        for (int i = 0; i < memoryFields.length; i++) {
+            memoryFields[i].setText(String.format("0x%03X: 0x%02X", i, cpu.getMemory().get(i)));
+        }
+
+        for (int i = 0; i < stackFields.length; i++) {
+            stackFields[i].setText(String.format("0x%03X: 0x%04X", i, (int) cpu.getStack().get(i)));
+        }
+    }
+
+    private File fileChooser() throws IOException {
+
+        Stage root = (Stage) Stage.getWindows().getLast();
+        FileChooser fc = new FileChooser();
+
+        File file = fc.showOpenDialog(root);
+        if (file != null) {
+            emu.loadRom(file.getAbsolutePath());
+            System.out.println("File loaded: " + file.getAbsolutePath());
+            updateDebugInfo();
+        } else {
+            System.out.println("File selection cancelled.");
+        }
+        return file;
+    }
+
 }

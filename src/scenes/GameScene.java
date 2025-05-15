@@ -7,26 +7,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import scenes.components.DebuggerGUIComponents;
 
-public class GameScene {
-    private static Emulator emu;
+public class GameScene extends Scene {
+    private GameDisplay gDisplay;
+    private DebuggerGUIComponents debuggerGUIComponents;
 
     public GameScene(Emulator emulator) {
-        emu = emulator;
-    }
+        super(new SplitPane(), 1000, 750);
+        SplitPane root = (SplitPane) getRoot();
+        debuggerGUIComponents = new DebuggerGUIComponents(emulator);
 
-    public Stage render(Stage stage) {
-        stage.setTitle("JIF-8 Runner");
-        stage.show();
-        DebuggerGUIComponents debuggerGUIComponents = new DebuggerGUIComponents(emu);
+        VBox debuggerbox = debuggerGUIComponents.buildContentBox();
+        debuggerbox.setMinWidth(350);
 
-        VBox contentBox = debuggerGUIComponents.buildContentBox();
-        contentBox.setMinWidth(350);
-
-        Display display = emu.getCPU().getDisplay();
-        GameDisplay gDisplay = new GameDisplay(display, 20);
+        Display display = emulator.getCPU().getDisplay();
+        gDisplay = new GameDisplay(display, 20);
 
         BorderPane gameScreenPane = new BorderPane(gDisplay.getCanvas());
 
@@ -34,15 +30,18 @@ public class GameScene {
 
         gameScreenPane.setMinWidth(gDisplay.getWidth());
 
-        SplitPane contentSplit = new SplitPane(gameScreenPane, contentBox);
-        contentSplit.setOrientation(Orientation.HORIZONTAL);
-        contentSplit.setDividerPositions(0.66);
-
-        Scene scene = new Scene(contentSplit, 1000, 750);
-        stage.setScene(scene);
-        stage.setResizable(true);
-
-        return stage;
+        root.getItems().addAll(gameScreenPane, debuggerbox);
+        root.setOrientation(Orientation.HORIZONTAL);
+        root.setDividerPositions(0.66);
     }
 
+    public void updateDisplay() {
+        System.out.println("Updating display");
+        if (gDisplay != null) {
+            gDisplay.render();
+        }
+        if (debuggerGUIComponents != null) {
+            debuggerGUIComponents.updateDebugInfo();
+        }
+    }
 }
