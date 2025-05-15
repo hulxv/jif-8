@@ -8,6 +8,7 @@ public class Emulator {
     private Keyboard keyboard;
     private SoundSystem soundSystem;
     private Loader loader;
+    private boolean isRunning = false;
 
     public Emulator() {
         initialize();
@@ -25,12 +26,26 @@ public class Emulator {
         System.out.println("Emulator components initialized");
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void stop() {
+        isRunning = false;
+    }
+
+    public void run() {
+        isRunning = true;
+    }
+
     public void loadRom(String romPath) {
         try {
+            cpu.reset();
             System.out.println("Loading ROM from: " + romPath);
             byte[] romData = loader.loadRom(romPath);
             memory.loadROM(romData);
             System.out.println("ROM loaded");
+            run();
         } catch (Exception e) {
             System.err.println("Error loading ROM: " + e.getMessage());
             return;
@@ -42,7 +57,9 @@ public class Emulator {
     }
 
     public void emulateCycle() {
-        cpu.cycle();
+        if (isRunning()) {
+            cpu.cycle();
+        }
     }
 
     public CPU getCPU() {

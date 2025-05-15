@@ -8,8 +8,8 @@ import core.instruction.Instruction;
 
 public class CPU {
     private Registers registers;
-    private char I;
-    private char PC;
+    private int I;
+    private int PC;
     private Stack stack;
     private byte delayTimer;
     private byte soundTimer;
@@ -22,8 +22,7 @@ public class CPU {
 
     public CPU(Memory memory, Stack stack, Display display, Keyboard keyboard, SoundSystem soundSystem) {
         registers = new Registers();
-        I = 0;
-        PC = 0x200;
+
         this.stack = stack;
         this.memory = memory;
         this.display = display;
@@ -31,6 +30,7 @@ public class CPU {
         this.soundSystem = soundSystem;
         decoder = new Decoder(this);
         executer = new Executer();
+        reset();
     }
 
     public Registers getRegisters() {
@@ -65,10 +65,6 @@ public class CPU {
         return executer;
     }
 
-    public char getOpcode() {
-        return (char) (memory.RAM[this.PC] << 8 | memory.RAM[this.PC + 1]);
-    }
-
     public void reset() {
         registers.reset();
         I = 0;
@@ -82,9 +78,13 @@ public class CPU {
     }
 
     public void cycle() {
-        char opcode = fetch();
-        // Instruction instruction = decoder.decode(opcode);
-        // executer.execute(instruction);
+        char instruction = fetch();
+        Instruction decodedInstruction = decoder.decode(instruction);
+        System.out.printf("EXECUTE: PC: 0x%03X, I: 0x%03X, Instruction: %s\n", (int) PC, (int) I,
+                decodedInstruction.toString());
+        executer.execute(decodedInstruction);
+        PC += 2;
+        System.out.println("PC: " + PC);
         updateTimers();
     }
 
@@ -95,27 +95,32 @@ public class CPU {
             soundTimer--;
 
         if (soundTimer == 0)
-            ; // soundSystem.beeb();
+            soundSystem.beeb();
     }
 
     public char fetch() {
-        return (char) (memory.RAM[this.PC] << 8 | memory.RAM[this.PC + 1]);
+        // Read high byte first, then low byte
+        char high = (char) (memory.RAM[PC] & 0xFF);
+        char low = (char) (memory.RAM[PC + 1] & 0xFF);
+        char op = (char) ((high << 8) | low);
+        System.out.printf("FETCH: PC=0x%03X, Opcode=0x%04X\n", PC, (int) op);
+        return op;
     }
 
-    public char getI() {
+    public int getI() {
         return I;
     }
 
     public void setI(char value) {
-        I = value;
+        I = value & 0xFFF;
     }
 
-    public char getPC() {
+    public int getPC() {
         return PC;
     }
 
-    public void setPC(char value) {
-        PC = value;
+    public void setPC(int value) {
+        PC = value & 0xFFF;
     }
 
     public byte getDelayTimer() {

@@ -8,7 +8,7 @@ public class Memory {
    private static final int ROM_START = 0x200;
 
    public Memory() {
-      RAM = new byte[4096];
+      RAM = new byte[MEMORY_SIZE];
       fontSet = new byte[] {
             (byte) 0xF0, (byte) 0x90, (byte) 0x90, (byte) 0x90, (byte) 0xF0, // 0
             (byte) 0x20, (byte) 0x60, (byte) 0x20, (byte) 0x20, (byte) 0x70, // 1
@@ -42,6 +42,10 @@ public class Memory {
       }
    }
 
+   public byte get(int index) {
+      return RAM[index];
+   }
+
    public void loadROM(byte[] rom) {
       if (rom == null) {
          throw new IllegalArgumentException("ROM data cannot be null");
@@ -54,25 +58,30 @@ public class Memory {
       System.arraycopy(rom, 0, RAM, ROM_START, rom.length);
    }
 
-   public byte read(char address) {
+   public byte read(int address) {
       if (address >= RAM.length) {
          throw new IllegalArgumentException("Memory address out of bounds");
       }
       return (byte) (RAM[address] & 0xFF);
    }
 
-   public void write(char address, char value) {
+   public void write(int address, int value) {
       if (address >= RAM.length) {
          throw new IllegalArgumentException("Memory address out of bounds");
       }
       RAM[address] = (byte) value;
    }
 
-   public byte[] dump(char start, char length) {
+   public byte[] dump(int start, int length) {
       byte[] segment = new byte[length];
       for (int i = 0; i < length; i++) {
          segment[i] = RAM[start + i];
       }
       return segment;
+   }
+
+
+   public static int getMemorySize() {
+       return MEMORY_SIZE;
    }
 }

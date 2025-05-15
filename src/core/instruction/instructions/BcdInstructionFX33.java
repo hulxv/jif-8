@@ -17,11 +17,11 @@ public class BcdInstructionFX33 extends Instruction {
         byte tens = (byte) ((value / 10) % 10);
         byte ones = (byte) (value % 10);
 
-        char I = cpu.getI();
+        int I = cpu.getI();
 
-        cpu.getMemory().write(I, (char) hundreds);
-        cpu.getMemory().write((char) (I + 1), (char) tens);
-        cpu.getMemory().write((char) (I + 2), (char) ones);
+        cpu.getMemory().write(I, hundreds);
+        cpu.getMemory().write(I + 1, tens);
+        cpu.getMemory().write(I + 2, ones);
     }
 
     @Override
