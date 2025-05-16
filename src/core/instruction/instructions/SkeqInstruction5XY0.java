@@ -16,15 +16,14 @@ public class SkeqInstruction5XY0 extends Instruction {
         // Implementation will skip next instruction if VX not equals VY
         byte valueX = cpu.getRegisters().getRegister(rX);
         byte valueY = cpu.getRegisters().getRegister(rY);
-        char PC = cpu.getPC();
-        char PCNewValue = (char) (PC + 2);
+        int PC = cpu.getPC();
 
         if (valueX == valueY)
-            cpu.setPC(PCNewValue);
+            cpu.setPC(PC + 2);
     }
 
     @Override
     public String toString() {
-        return String.format("SKNE V%X, V%X", rX, rY);
+        return String.format("SKQE V%X, V%X", rX, rY);
     }
 }

@@ -15,11 +15,10 @@ public class SkneConstInstruction4XNN extends Instruction {
     public void execute() {
         // Implementation will skip next instruction if VX not equals NN
         byte valueX = cpu.getRegisters().getRegister(register);
-        char PC = cpu.getPC();
-        char PCNewValue = (char) (PC + 2);
+        int PC = cpu.getPC();
 
         if (valueX != (byte) value)
-            cpu.setPC(PCNewValue);
+            cpu.setPC(PC + 2);
     }
 
     @Override

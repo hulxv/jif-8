@@ -1,39 +1,77 @@
 package scenes.components;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import core.CPU;
 import core.Emulator;
-import core.Registers;
+import core.Memory;
+import core.Stack;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class DebuggerGUIComponents {
+public class DebuggerGUIComponents extends VBox {
     private static Emulator emu;
-    private final TextField[] memoryFields = new TextField[256];
-    private final TextField[] stackFields = new TextField[64];
+    private final TextField[] memoryFields = new TextField[Memory.MEMORY_SIZE];
+    private final TextField[] stackFields = new TextField[Stack.STACK_SIZE];
     private HashMap<String, Number> specialRegisters = new HashMap<>();
-
-    // private final String[] specialRegisters = { "PC", "SP", "DT", "ST", " I" };
+    private GridPane registersGrid = new GridPane();
+    private Timeline timeline;
 
     private Font usedFont;
     private Font labelFont;
     private Font buttonFont;
 
     public DebuggerGUIComponents(Emulator emulator) {
+        super();
         emu = emulator;
         CPU cpu = emu.getCPU();
+        initializeFonts();
+
         specialRegisters.put(" I", (int) cpu.getI());
         specialRegisters.put("PC", (int) cpu.getPC());
         specialRegisters.put("DT", (int) cpu.getDelayTimer());
         specialRegisters.put("ST", (int) cpu.getSoundTimer());
         specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
 
-        initializeFonts();
+        for (int i = 0; i < memoryFields.length; i++) {
+            memoryFields[i] = createStyledTextField(String.format("0x%03X: 0x%02X", i, cpu.getMemory().get(i)));
+        }
+        for (int i = 0; i < stackFields.length; i++) {
+            stackFields[i] = createStyledTextField(String.format("0x%03X: 0x%04X", i, (int) cpu.getStack().get(i)));
+        }
+        SplitPane memoryAndStack = buildMemoryAndStackBoxes();
+        memoryAndStack.setStyle("-fx-background-color: rgb(24,20,20);");
+
+        VBox.setVgrow(memoryAndStack, Priority.ALWAYS);
+        VBox.setVgrow(this, Priority.ALWAYS);
+
+        this.getChildren().addAll(memoryAndStack, buildRegistersBox(), buildButtonBar());
+        this.setSpacing(10);
+        this.setPadding(new Insets(10));
+        this.setStyle("-fx-background-color: rgb(24,20,20);");
+
+        timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 2), e -> {
+            if (emulator.isRunning()) {
+                updateDebugInfo();
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    Timeline getTimeline() {
+        return timeline;
     }
 
     private void initializeFonts() {
@@ -42,25 +80,9 @@ public class DebuggerGUIComponents {
         buttonFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 14);
     }
 
-    public VBox buildContentBox() {
-        VBox contentBox = new VBox();
-        SplitPane memoryAndStack = buildMemoryAndStackBoxes();
-        memoryAndStack.setStyle("-fx-background-color: rgb(24,20,20);");
-
-        VBox.setVgrow(memoryAndStack, Priority.ALWAYS);
-        VBox.setVgrow(contentBox, Priority.ALWAYS);
-
-        contentBox.getChildren().addAll(memoryAndStack, buildRegistersBox(), buildButtonBar());
-        contentBox.setSpacing(10);
-        contentBox.setPadding(new Insets(10));
-        contentBox.setStyle("-fx-background-color: rgb(24,20,20);");
-
-        return contentBox;
-    }
-
     private SplitPane buildMemoryAndStackBoxes() {
-        VBox memoryBox = buildSectionBox(memoryFields, "Memory", 256);
-        VBox stackBox = buildSectionBox(stackFields, "Stack", 16);
+        VBox memoryBox = buildSectionBox(memoryFields, "Memory");
+        VBox stackBox = buildSectionBox(stackFields, "Stack");
 
         SplitPane memoryAndStackBox = new SplitPane(memoryBox, stackBox);
         memoryAndStackBox.setOrientation(Orientation.HORIZONTAL);
@@ -70,13 +92,12 @@ public class DebuggerGUIComponents {
         return memoryAndStackBox;
     }
 
-    private VBox buildSectionBox(TextField[] fields, String label, int count) {
+    private VBox buildSectionBox(TextField[] fields, String label) {
         VBox contentBox = new VBox(5);
         contentBox.setPadding(new Insets(5));
         contentBox.setStyle("-fx-background-color: rgb(24,20,20);");
 
-        for (int i = 0; i < count; i++) {
-            fields[i] = createStyledTextField(String.format("0x%03X: %08X", i, 0x00000000));
+        for (int i = 0; i < fields.length; i++) {
             fields[i].setFont(usedFont);
             contentBox.getChildren().add(fields[i]);
         }
@@ -105,7 +126,6 @@ public class DebuggerGUIComponents {
         registersLabel.setStyle("-fx-text-fill: white;");
         registersLabel.setFont(labelFont);
 
-        GridPane registersGrid = new GridPane();
         registersGrid.setStyle("-fx-background-color: rgb(24,20,20); -fx-border-color: white;");
         registersGrid.setHgap(5);
         registersGrid.setVgap(5);
@@ -114,15 +134,14 @@ public class DebuggerGUIComponents {
         for (int i = 0; i < emu.getCPU().getRegisters().getSize(); i++) {
             registersGrid.add(
                     createStyledTextField(
-                            String.format("V%X: %08X", i, emu.getCPU().getRegisters().getRegister(i)))
-
-                    , i % 2, i / 2);
+                            String.format("V%X: 0x%03X", i, emu.getCPU().getRegisters().getRegister(i))),
+                    i % 2, i / 2);
         }
 
         for (int i = 0; i < specialRegisters.size(); i++) {
             String k = (String) specialRegisters.keySet().toArray()[i];
             registersGrid.add(
-                    createStyledTextField(String.format("%s: %08X", k, specialRegisters.get(k))), 2, i);
+                    createStyledTextField(String.format("%s: 0x%03X", k, specialRegisters.get(k))), 2, i);
         }
 
         ScrollPane registersScroll = new ScrollPane(registersGrid);
@@ -142,9 +161,8 @@ public class DebuggerGUIComponents {
         Button pauseButton = new Button("Pause");
         Button resetButton = new Button("Reset");
         Button loadButton = new Button("Load");
-        Button memoryHexViewButton = new Button("Memory Hex View");
 
-        for (Button btn : new Button[] { startButton, pauseButton, resetButton, loadButton, memoryHexViewButton }) {
+        for (Button btn : new Button[] { startButton, pauseButton, resetButton, loadButton }) {
             btn.setMaxWidth(Double.MAX_VALUE);
             btn.setFont(buttonFont);
         }
@@ -166,17 +184,23 @@ public class DebuggerGUIComponents {
         buttonBar.add(loadButton, 1, 1);
         GridPane.setHgrow(loadButton, Priority.ALWAYS);
 
-        buttonBar.add(memoryHexViewButton, 0, 2, 2, 1);
-        GridPane.setHgrow(memoryHexViewButton, Priority.ALWAYS);
-
-        startButton.setOnAction(event -> System.out.println("Start is pressed"));
-        pauseButton.setOnAction(event -> System.out.println("Pause is pressed"));
-        resetButton.setOnAction(event -> System.out.println("Reset is pressed"));
-        loadButton.setOnAction(event -> System.out.println("Load is pressed"));
-        memoryHexViewButton.setOnAction(event -> System.out.println("Memory Hex View is pressed"));
-
         VBox buttonBox = new VBox(buttonBar);
         VBox.setVgrow(buttonBox, Priority.NEVER);
+
+        loadButton.setOnAction(event -> {
+            try {
+                fileChooser();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        startButton.setOnAction(event -> emu.start());
+        pauseButton.setOnAction(event -> emu.pause());
+        resetButton.setOnAction(event -> {
+            emu.reset();
+            updateDebugInfo();
+        });
 
         return buttonBox;
     }
@@ -189,4 +213,50 @@ public class DebuggerGUIComponents {
         textField.setFont(usedFont);
         return textField;
     }
+
+    public void updateDebugInfo() {
+        CPU cpu = emu.getCPU();
+
+        specialRegisters.put(" I", (int) cpu.getI());
+        specialRegisters.put("PC", (int) cpu.getPC());
+        specialRegisters.put("DT", (int) cpu.getDelayTimer());
+        specialRegisters.put("ST", (int) cpu.getSoundTimer());
+        specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
+        for (int i = 0; i < emu.getCPU().getRegisters().getSize(); i++) {
+            registersGrid.add(
+                    createStyledTextField(
+                            String.format("V%X: 0x%03X", i, emu.getCPU().getRegisters().getRegister(i))),
+                    i % 2, i / 2);
+        }
+        for (int i = 0; i < specialRegisters.size(); i++) {
+            String k = (String) specialRegisters.keySet().toArray()[i];
+            registersGrid.add(
+                    createStyledTextField(String.format("%s: 0x%03X", k, specialRegisters.get(k))), 2, i);
+        }
+
+        for (int i = 0; i < stackFields.length; i++) {
+            stackFields[i].setText(String.format("0x%03X: 0x%04X", i, (int) cpu.getStack().get(i)));
+        }
+    }
+
+    private File fileChooser() throws IOException {
+
+        Stage root = (Stage) Stage.getWindows().getLast();
+        FileChooser fc = new FileChooser();
+
+        File file = fc.showOpenDialog(root);
+        if (file != null) {
+            emu.loadRom(file.getAbsolutePath());
+            System.out.println("File loaded: " + file.getAbsolutePath());
+            for (int i = 0; i < memoryFields.length; i++) {
+                memoryFields[i].setText(String.format("0x%03X: 0x%02X", i, emu.getCPU().getMemory().get(i)));
+            }
+
+            updateDebugInfo();
+        } else {
+            System.out.println("File selection cancelled.");
+        }
+        return file;
+    }
+
 }

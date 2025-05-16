@@ -8,7 +8,7 @@ public class Memory {
    private static final int ROM_START = 0x200;
 
    public Memory() {
-      RAM = new byte[4096];
+      RAM = new byte[MEMORY_SIZE];
       fontSet = new byte[] {
             (byte) 0xF0, (byte) 0x90, (byte) 0x90, (byte) 0x90, (byte) 0xF0, // 0
             (byte) 0x20, (byte) 0x60, (byte) 0x20, (byte) 0x20, (byte) 0x70, // 1
@@ -27,6 +27,7 @@ public class Memory {
             (byte) 0xF0, (byte) 0x80, (byte) 0xF0, (byte) 0x80, (byte) 0xF0, // E
             (byte) 0xF0, (byte) 0x80, (byte) 0xF0, (byte) 0x80, (byte) 0x80 // F
       };
+      loadFontSet();
       System.out.println("Memory initialized");
    }
 
@@ -34,12 +35,15 @@ public class Memory {
       for (int i = 0; i < RAM.length; i++) {
          RAM[i] = 0;
       }
+      loadFontSet();
    }
 
    public void loadFontSet() {
-      for (int i = 0x50; i < 0x9F; i++) {
-         RAM[i] = fontSet[i];
-      }
+      System.arraycopy(fontSet, 0, RAM, 0x050, fontSet.length);
+   }
+
+   public byte get(int index) {
+      return RAM[index];
    }
 
    public void loadROM(byte[] rom) {
@@ -54,25 +58,29 @@ public class Memory {
       System.arraycopy(rom, 0, RAM, ROM_START, rom.length);
    }
 
-   public byte read(char address) {
+   public byte read(int address) {
       if (address >= RAM.length) {
          throw new IllegalArgumentException("Memory address out of bounds");
       }
       return (byte) (RAM[address] & 0xFF);
    }
 
-   public void write(char address, char value) {
+   public void write(int address, int value) {
       if (address >= RAM.length) {
          throw new IllegalArgumentException("Memory address out of bounds");
       }
       RAM[address] = (byte) value;
    }
 
-   public byte[] dump(char start, char length) {
+   public byte[] dump(int start, int length) {
       byte[] segment = new byte[length];
       for (int i = 0; i < length; i++) {
          segment[i] = RAM[start + i];
       }
       return segment;
+   }
+
+   public static int getMemorySize() {
+      return MEMORY_SIZE;
    }
 }

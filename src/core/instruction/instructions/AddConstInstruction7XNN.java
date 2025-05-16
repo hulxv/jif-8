@@ -14,9 +14,8 @@ public class AddConstInstruction7XNN extends Instruction {
     @Override
     public void execute() {
         int current = cpu.getRegisters().getRegister(register) & 0xFF;
-        int res = (value+current) & 0xFF;
-        cpu.getRegisters().setRegister(register,(byte) res);
-
+        int res = (value + current) & 0xFF;
+        cpu.getRegisters().setRegister(register, (byte) res);
     }
 
     @Override

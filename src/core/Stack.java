@@ -1,40 +1,41 @@
 package core;
 
 public class Stack {
-    private char[] stack;
-    private char stackPointer = 0;
+    public static final int STACK_SIZE = 16;
+    private int[] stack;
+    private int stackPointer;
 
     public Stack() {
-        stack = new char[16];
+        stack = new int[STACK_SIZE];
+        reset();
+    }
+
+    public void push(int value) {
+        if (stackPointer >= STACK_SIZE) {
+            throw new RuntimeException("CHIP-8 stack overflow");
+        }
+        stack[stackPointer++] = value;
+    }
+
+    public int pop() {
+        if (stackPointer <= 0) {
+            throw new RuntimeException("CHIP-8 stack underflow");
+        }
+        return stack[--stackPointer];
+    }
+
+    public void reset() {
+        stackPointer = 0;
         for (int i = 0; i < stack.length; i++) {
             stack[i] = 0;
         }
-        System.out.println("Stack initialized");
     }
 
-    public void push(char value) {
-        if (stackPointer + 1 < 16)
-            stack[stackPointer++] = value;
-    }
-
-    public char pop() {
-        char value = getLast();
-        if (stackPointer - 1 >= 0)
-            stack[stackPointer] = 0;
-        stackPointer--;
-        return value;
-    }
-
-    public char getLast() {
-        return stack[stackPointer];
-    }
-
-    public char getStackPointer() {
+    public int getStackPointer() {
         return stackPointer;
     }
-    public void reset() {
-        for (int i = 0; i < stack.length; i++) {
-            stack[i] = 0;
-        }
+
+    public int get(int index) {
+        return stack[index];
     }
 }

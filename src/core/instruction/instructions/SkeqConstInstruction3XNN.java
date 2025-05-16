@@ -15,11 +15,10 @@ public class SkeqConstInstruction3XNN extends Instruction {
     public void execute() {
         // Implementation will skip next instruction if VX equals NN
         byte valueX = cpu.getRegisters().getRegister(register);
-        char PC = cpu.getPC();
-        char PCNewValue = (char) (PC + 2);
+        int PC = cpu.getPC();
 
-        if (valueX == (byte) value) 
-            cpu.setPC(PCNewValue);
+        if (valueX == (byte) value)
+            cpu.setPC(PC + 2);
     }
 
     @Override

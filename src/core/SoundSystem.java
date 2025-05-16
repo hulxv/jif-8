@@ -7,7 +7,7 @@ public class SoundSystem {
     private Clip clip;
 
     public SoundSystem() {
-        //initialize();
+        initialize();
     }
 
     public void initialize() {
@@ -34,6 +34,14 @@ public class SoundSystem {
     public void stopSound() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
+        }
+    }
+
+    public void beeb(){
+        if (clip != null) {
+            playSound();
+        } else {
+            System.err.println("Sound clip is not initialized.");
         }
     }
 }

@@ -1,13 +1,11 @@
 package core;
 
-import java.util.Arrays;
-
 public class Display {
 
     private boolean[][] pixels;
     private static final int width = 64;
     private static final int height = 32;
-  
+
     public boolean drawFlag = false;
 
     public Display() {
@@ -28,10 +26,11 @@ public class Display {
 
     public void reset() {
         pixels = new boolean[width][height];
+        clearDrawFlag();
     }
 
     public void setPixel(int x, int y, boolean value) {
-        if (x < height && x >= 0 && y < width && y >= 0) {
+        if (x < width && x >= 0 && y < height && y >= 0) {
             pixels[x][y] = value;
         }
     }

@@ -35,7 +35,7 @@ public class InstructionFactory {
                 break;
 
             case 0x1:
-                return initInstruction(new JmpInstruction1NNN((char) nnn));
+                return initInstruction(new JmpInstruction1NNN(nnn));
 
             case 0x2:
                 return initInstruction(new JsrInstruction2NNN(nnn));

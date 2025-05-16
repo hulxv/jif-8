@@ -10,6 +10,7 @@ public class ClsInstruction00E0 extends Instruction {
     @Override
     public void execute() {
         cpu.getDisplay().reset();
+        cpu.setDrawFlag(true);
     }
 
     @Override

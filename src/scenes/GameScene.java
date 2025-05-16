@@ -6,43 +6,36 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import scenes.components.DebuggerGUIComponents;
 
-public class GameScene {
-    private static Emulator emu;
+public class GameScene extends Scene {
+    private GameDisplay gDisplay;
+    private DebuggerGUIComponents debuggerGUIComponents;
 
     public GameScene(Emulator emulator) {
-        emu = emulator;
-    }
+        super(new SplitPane(), 1000, 750);
+        SplitPane root = (SplitPane) getRoot();
+        debuggerGUIComponents = new DebuggerGUIComponents(emulator);
+        debuggerGUIComponents.setMinWidth(440);
+        debuggerGUIComponents.setMaxWidth(440);
 
-    public Stage render(Stage stage) {
-        stage.setTitle("JIF-8 Runner");
-        stage.show();
-        DebuggerGUIComponents debuggerGUIComponents = new DebuggerGUIComponents(emu);
+        Display display = emulator.getCPU().getDisplay();
+        gDisplay = new GameDisplay(emulator, display, 20);
 
-        VBox contentBox = debuggerGUIComponents.buildContentBox();
-        contentBox.setMinWidth(350);
-
-        Display display = emu.getCPU().getDisplay();
-        GameDisplay gDisplay = new GameDisplay(display, 20);
-
-        BorderPane gameScreenPane = new BorderPane(gDisplay.getCanvas());
-
+        BorderPane gameScreenPane = new BorderPane(gDisplay.getDisplay());
         gameScreenPane.setStyle("-fx-background-color: rgba(33,32,32,1);");
 
-        gameScreenPane.setMinWidth(gDisplay.getWidth());
+        gameScreenPane.setMinWidth(gDisplay.getWidth() * 2);
 
-        SplitPane contentSplit = new SplitPane(gameScreenPane, contentBox);
-        contentSplit.setOrientation(Orientation.HORIZONTAL);
-        contentSplit.setDividerPositions(0.66);
+        root.getItems().addAll(gameScreenPane, debuggerGUIComponents);
+        root.setOrientation(Orientation.HORIZONTAL);
+        root.setDividerPositions(0.66);
 
-        Scene scene = new Scene(contentSplit, 1000, 750);
-        stage.setScene(scene);
-        stage.setResizable(true);
-
-        return stage;
+        this.setOnKeyPressed(e -> {
+            emulator.getCPU().getKeyboard().handleKeyPressed(e);
+        });
+        this.setOnKeyReleased(e -> {
+            emulator.getCPU().getKeyboard().handleKeyReleased(e);
+        });
     }
-
 }
