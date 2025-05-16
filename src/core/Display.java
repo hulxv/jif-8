@@ -1,13 +1,11 @@
 package core;
 
-import java.util.Arrays;
-
 public class Display {
 
     private boolean[][] pixels;
     private static final int width = 64;
     private static final int height = 32;
-  
+
     public boolean drawFlag = false;
 
     public Display() {

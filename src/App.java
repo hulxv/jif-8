@@ -1,10 +1,8 @@
 import core.Emulator;
-import scenes.GameScene;
 import scenes.WelcomeScene;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
