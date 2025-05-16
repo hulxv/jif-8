@@ -13,6 +13,7 @@ public class FontInstructionFX29 extends Instruction {
     public void execute() {
         int digit = cpu.getRegisters().getRegister(register) & 0x0F; // Get lower 4 bits (0–F)
         cpu.setI((char) (digit * 5)); // Set I to font sprite address
+        cpu.setDrawFlag(true);
     }
 
     @Override

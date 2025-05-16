@@ -12,6 +12,7 @@ public class RtsInstruction00EE extends Instruction {
         // Assuming stack is a field in the CPU class
         // stack.pop();
         cpu.setPC(cpu.getStack().pop());
+        cpu.setDrawFlag(true);
     }
 
     @Override

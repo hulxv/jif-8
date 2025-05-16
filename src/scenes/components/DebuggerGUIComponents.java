@@ -8,31 +8,36 @@ import core.CPU;
 import core.Emulator;
 import core.Memory;
 import core.Stack;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import scenes.GameScene;
+import javafx.util.Duration;
 
-public class DebuggerGUIComponents {
+public class DebuggerGUIComponents extends VBox {
     private static Emulator emu;
     private final TextField[] memoryFields = new TextField[Memory.MEMORY_SIZE];
     private final TextField[] stackFields = new TextField[Stack.STACK_SIZE];
     private HashMap<String, Number> specialRegisters = new HashMap<>();
     private GridPane registersGrid = new GridPane();
+    private Timeline timeline;
 
     private Font usedFont;
     private Font labelFont;
     private Font buttonFont;
 
     public DebuggerGUIComponents(Emulator emulator) {
+        super();
         emu = emulator;
         CPU cpu = emu.getCPU();
+        initializeFonts();
+
         specialRegisters.put(" I", (int) cpu.getI());
         specialRegisters.put("PC", (int) cpu.getPC());
         specialRegisters.put("DT", (int) cpu.getDelayTimer());
@@ -45,29 +50,34 @@ public class DebuggerGUIComponents {
         for (int i = 0; i < stackFields.length; i++) {
             stackFields[i] = createStyledTextField(String.format("0x%03X: 0x%04X", i, (int) cpu.getStack().get(i)));
         }
-        initializeFonts();
+        SplitPane memoryAndStack = buildMemoryAndStackBoxes();
+        memoryAndStack.setStyle("-fx-background-color: rgb(24,20,20);");
+
+        VBox.setVgrow(memoryAndStack, Priority.ALWAYS);
+        VBox.setVgrow(this, Priority.ALWAYS);
+
+        this.getChildren().addAll(memoryAndStack, buildRegistersBox(), buildButtonBar());
+        this.setSpacing(10);
+        this.setPadding(new Insets(10));
+        this.setStyle("-fx-background-color: rgb(24,20,20);");
+
+        timeline = new Timeline(new KeyFrame(Duration.millis(1000 / 2), e -> {
+            if (emulator.isRunning()) {
+                updateDebugInfo();
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    Timeline getTimeline() {
+        return timeline;
     }
 
     private void initializeFonts() {
         usedFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 10);
         labelFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 12);
         buttonFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(), 14);
-    }
-
-    public VBox buildContentBox() {
-        VBox contentBox = new VBox();
-        SplitPane memoryAndStack = buildMemoryAndStackBoxes();
-        memoryAndStack.setStyle("-fx-background-color: rgb(24,20,20);");
-
-        VBox.setVgrow(memoryAndStack, Priority.ALWAYS);
-        VBox.setVgrow(contentBox, Priority.ALWAYS);
-
-        contentBox.getChildren().addAll(memoryAndStack, buildRegistersBox(), buildButtonBar());
-        contentBox.setSpacing(10);
-        contentBox.setPadding(new Insets(10));
-        contentBox.setStyle("-fx-background-color: rgb(24,20,20);");
-
-        return contentBox;
     }
 
     private SplitPane buildMemoryAndStackBoxes() {
@@ -151,9 +161,8 @@ public class DebuggerGUIComponents {
         Button pauseButton = new Button("Pause");
         Button resetButton = new Button("Reset");
         Button loadButton = new Button("Load");
-        Button memoryHexViewButton = new Button("Memory Hex View");
 
-        for (Button btn : new Button[] { startButton, pauseButton, resetButton, loadButton, memoryHexViewButton }) {
+        for (Button btn : new Button[] { startButton, pauseButton, resetButton, loadButton }) {
             btn.setMaxWidth(Double.MAX_VALUE);
             btn.setFont(buttonFont);
         }
@@ -175,9 +184,6 @@ public class DebuggerGUIComponents {
         buttonBar.add(loadButton, 1, 1);
         GridPane.setHgrow(loadButton, Priority.ALWAYS);
 
-        buttonBar.add(memoryHexViewButton, 0, 2, 2, 1);
-        GridPane.setHgrow(memoryHexViewButton, Priority.ALWAYS);
-
         VBox buttonBox = new VBox(buttonBar);
         VBox.setVgrow(buttonBox, Priority.NEVER);
 
@@ -194,14 +200,7 @@ public class DebuggerGUIComponents {
         resetButton.setOnAction(event -> {
             emu.reset();
             updateDebugInfo();
-
-            Scene currentScene = Stage.getWindows().getLast().getScene();
-            if (currentScene instanceof GameScene) {
-                GameScene gameScene = (GameScene) currentScene;
-                gameScene.updateDisplay();
-            }
         });
-        memoryHexViewButton.setOnAction(event -> System.out.println("Memory Hex View is pressed"));
 
         return buttonBox;
     }

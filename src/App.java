@@ -11,13 +11,10 @@ public class App extends Application {
     private static Emulator emulator = new Emulator();
     private AnimationTimer gameLoop;
     private long lastEmulationTime = 0;
-    private long lastRenderTime = 0;
 
-    private final int CYCLES_PER_SECOND = 500;
-    private final int FPS = 30;
+    private final int CYCLES_PER_SECOND = 400;
 
     private final long CYCLE_INTERVAL = 1_000_000_000 / CYCLES_PER_SECOND;
-    private final long RENDER_INTERVAL = 1_000_000_000 / FPS;
 
     @Override
     public void start(Stage primaryStage) {
@@ -35,17 +32,6 @@ public class App extends Application {
 
                     lastEmulationTime = now;
                 }
-
-                // Handle screen updates at a fixed rate
-                if (emulator.isRunning() && emulator.getCPU().getDrawFlag()
-                        && now - lastRenderTime >= RENDER_INTERVAL) {
-                    Scene currentScene = primaryStage.getScene();
-                    if (currentScene instanceof GameScene) {
-                        GameScene gameScene = (GameScene) currentScene;
-                        gameScene.updateDisplay();
-                    }
-                    lastRenderTime = now;
-                }
             }
         };
 
@@ -62,7 +48,6 @@ public class App extends Application {
                 System.out.println("Gameloop is starting....");
                 if (gameLoop != null) {
                     lastEmulationTime = System.nanoTime();
-                    lastRenderTime = System.nanoTime();
                     gameLoop.start();
                 }
             }
