@@ -20,6 +20,9 @@ public class CPU {
     private Decoder decoder;
     private Executer executer;
 
+    private boolean drawFlag = false;
+    private boolean soundWasPlaying = false;
+
     public CPU(Memory memory, Stack stack, Display display, Keyboard keyboard, SoundSystem soundSystem) {
         registers = new Registers();
 
@@ -79,11 +82,11 @@ public class CPU {
 
     public void cycle() {
         char instruction = fetch();
+        PC = (PC + 2) & 0xFFF;
         Instruction decodedInstruction = decoder.decode(instruction);
         System.out.printf("EXECUTE: PC: 0x%03X, I: 0x%03X, Instruction: %s\n", (int) PC, (int) I,
                 decodedInstruction.toString());
         executer.execute(decodedInstruction);
-        PC += 2;
         System.out.println("PC: " + PC);
         updateTimers();
     }
@@ -94,8 +97,19 @@ public class CPU {
         if (soundTimer > 0)
             soundTimer--;
 
-        if (soundTimer == 0)
-            soundSystem.beeb();
+        boolean soundShouldBeActive = soundTimer > 0;
+
+        if (soundTimer == 0) {
+            soundShouldBeActive = false;
+        }
+
+        if (soundShouldBeActive && !soundWasPlaying) {
+            soundSystem.playSound();
+            soundWasPlaying = true;
+        } else if (!soundShouldBeActive && soundWasPlaying) {
+            soundSystem.stopSound();
+            soundWasPlaying = false;
+        }
     }
 
     public char fetch() {
@@ -141,5 +155,13 @@ public class CPU {
 
     public byte generateRandomByte() {
         return (byte) new Random().nextInt(256);
+    }
+
+    public void setDrawFlag(boolean drawFlag) {
+        this.drawFlag = drawFlag;
+    }
+
+    public boolean getDrawFlag() {
+        return drawFlag;
     }
 }

@@ -27,6 +27,7 @@ public class Memory {
             (byte) 0xF0, (byte) 0x80, (byte) 0xF0, (byte) 0x80, (byte) 0xF0, // E
             (byte) 0xF0, (byte) 0x80, (byte) 0xF0, (byte) 0x80, (byte) 0x80 // F
       };
+      loadFontSet();
       System.out.println("Memory initialized");
    }
 
@@ -34,12 +35,11 @@ public class Memory {
       for (int i = 0; i < RAM.length; i++) {
          RAM[i] = 0;
       }
+      loadFontSet();
    }
 
    public void loadFontSet() {
-      for (int i = 0x50; i < 0x9F; i++) {
-         RAM[i] = fontSet[i];
-      }
+      System.arraycopy(fontSet, 0, RAM, 0x050, fontSet.length);
    }
 
    public byte get(int index) {
@@ -80,8 +80,7 @@ public class Memory {
       return segment;
    }
 
-
    public static int getMemorySize() {
-       return MEMORY_SIZE;
+      return MEMORY_SIZE;
    }
 }
