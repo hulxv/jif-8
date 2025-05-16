@@ -33,6 +33,13 @@ public class GameScene extends Scene {
         root.getItems().addAll(gameScreenPane, debuggerbox);
         root.setOrientation(Orientation.HORIZONTAL);
         root.setDividerPositions(0.66);
+
+        this.setOnKeyPressed(e -> {
+            emulator.getCPU().getKeyboard().handleKeyPressed(e);;
+        });
+        this.setOnKeyReleased(e -> {
+            emulator.getCPU().getKeyboard().handleKeyReleased(e);
+        });
     }
 
     public void updateDisplay() {
