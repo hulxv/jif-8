@@ -75,7 +75,6 @@ public class CPU {
         stack.reset();
         delayTimer = 0;
         soundTimer = 0;
-        memory.reset();
         display.reset();
         soundSystem.stopSound();
     }

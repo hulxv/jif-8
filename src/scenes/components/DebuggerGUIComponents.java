@@ -11,17 +11,20 @@ import core.Stack;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import scenes.GameScene;
 
 public class DebuggerGUIComponents {
     private static Emulator emu;
     private final TextField[] memoryFields = new TextField[Memory.MEMORY_SIZE];
     private final TextField[] stackFields = new TextField[Stack.STACK_SIZE];
     private HashMap<String, Number> specialRegisters = new HashMap<>();
+    private GridPane registersGrid = new GridPane();
 
     private Font usedFont;
     private Font labelFont;
@@ -113,7 +116,6 @@ public class DebuggerGUIComponents {
         registersLabel.setStyle("-fx-text-fill: white;");
         registersLabel.setFont(labelFont);
 
-        GridPane registersGrid = new GridPane();
         registersGrid.setStyle("-fx-background-color: rgb(24,20,20); -fx-border-color: white;");
         registersGrid.setHgap(5);
         registersGrid.setVgap(5);
@@ -176,12 +178,6 @@ public class DebuggerGUIComponents {
         buttonBar.add(memoryHexViewButton, 0, 2, 2, 1);
         GridPane.setHgrow(memoryHexViewButton, Priority.ALWAYS);
 
-        startButton.setOnAction(event -> System.out.println("Start is pressed"));
-        pauseButton.setOnAction(event -> System.out.println("Pause is pressed"));
-        resetButton.setOnAction(event -> System.out.println("Reset is pressed"));
-        loadButton.setOnAction(event -> System.out.println("Load is pressed"));
-        memoryHexViewButton.setOnAction(event -> System.out.println("Memory Hex View is pressed"));
-
         VBox buttonBox = new VBox(buttonBar);
         VBox.setVgrow(buttonBox, Priority.NEVER);
 
@@ -192,6 +188,20 @@ public class DebuggerGUIComponents {
                 throw new RuntimeException(e);
             }
         });
+
+        startButton.setOnAction(event -> emu.start());
+        pauseButton.setOnAction(event -> emu.pause());
+        resetButton.setOnAction(event -> {
+            emu.reset();
+            updateDebugInfo();
+
+            Scene currentScene = Stage.getWindows().getLast().getScene();
+            if (currentScene instanceof GameScene) {
+                GameScene gameScene = (GameScene) currentScene;
+                gameScene.updateDisplay();
+            }
+        });
+        memoryHexViewButton.setOnAction(event -> System.out.println("Memory Hex View is pressed"));
 
         return buttonBox;
     }

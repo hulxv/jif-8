@@ -30,12 +30,21 @@ public class Emulator {
         return isRunning;
     }
 
-    public void stop() {
+    public void pause() {
         isRunning = false;
     }
 
-    public void run() {
+    public void start() {
         isRunning = true;
+    }
+
+    public void reset() {
+        cpu.reset();
+        // memory.reset();
+        stack.reset();
+        display.reset();
+        // keyboard.reset();
+        soundSystem.stopSound();
     }
 
     public void loadRom(String romPath) {
@@ -45,15 +54,11 @@ public class Emulator {
             byte[] romData = loader.loadRom(romPath);
             memory.loadROM(romData);
             System.out.println("ROM loaded");
-            run();
+            start();
         } catch (Exception e) {
             System.err.println("Error loading ROM: " + e.getMessage());
             return;
         }
-    }
-
-    public void start() {
-        System.out.println("Emulator started");
     }
 
     public void emulateCycle() {
