@@ -1,38 +1,58 @@
 import core.Emulator;
 import scenes.GameScene;
 import scenes.WelcomeScene;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class App extends Application {
     private static Emulator emulator = new Emulator();
-    private Timeline gameLoop;
+    private AnimationTimer gameLoop;
+    private long lastEmulationTime = 0;
+    private long lastRenderTime = 0;
+
+    private final int CYCLES_PER_SECOND = 500;
+    private final int FPS = 30;
+
+    private final long CYCLE_INTERVAL = 1_000_000_000 / CYCLES_PER_SECOND;
+    private final long RENDER_INTERVAL = 1_000_000_000 / FPS;
 
     @Override
     public void start(Stage primaryStage) {
-
         primaryStage.setScene(new WelcomeScene(emulator));
 
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (emulator.isRunning() && now - lastEmulationTime >= CYCLE_INTERVAL) {
+                    int cyclesToRun = Math.min(100, (int) ((now - lastEmulationTime) / CYCLE_INTERVAL));
 
-        KeyFrame kf = new KeyFrame(Duration.millis((1000 / 25)), e -> {
-            if (emulator.isRunning()) {
-                emulator.emulateCycle();
-                Scene currentScene = primaryStage.getScene();
-                GameScene gameScene = (GameScene) currentScene;
-                gameScene.updateDisplay();
+                    for (int i = 0; i < cyclesToRun; i++) {
+                        emulator.emulateCycle();
+                    }
+
+                    lastEmulationTime = now;
+                }
+
+                // Handle screen updates at a fixed rate
+                if (emulator.isRunning() && emulator.getCPU().getDrawFlag()
+                        && now - lastRenderTime >= RENDER_INTERVAL) {
+                    Scene currentScene = primaryStage.getScene();
+                    if (currentScene instanceof GameScene) {
+                        GameScene gameScene = (GameScene) currentScene;
+                        gameScene.updateDisplay();
+                    }
+                    lastRenderTime = now;
+                }
             }
-        });
+        };
 
-        gameLoop.getKeyFrames().add(kf);
         primaryStage.setOnCloseRequest(e -> {
-            gameLoop.stop();
+            if (gameLoop != null) {
+                gameLoop.stop();
+            }
             Platform.exit();
         });
 
@@ -40,16 +60,18 @@ public class App extends Application {
             System.out.println("Scene was changed");
             if (emulator.isRunning()) {
                 System.out.println("Gameloop is starting....");
-                gameLoop.play();
+                if (gameLoop != null) {
+                    lastEmulationTime = System.nanoTime();
+                    lastRenderTime = System.nanoTime();
+                    gameLoop.start();
+                }
             }
-
         });
-        primaryStage.show();
 
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        emulator.emulateCycle();
         launch();
     }
 }
