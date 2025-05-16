@@ -213,9 +213,16 @@ public class DebuggerGUIComponents {
         specialRegisters.put("DT", (int) cpu.getDelayTimer());
         specialRegisters.put("ST", (int) cpu.getSoundTimer());
         specialRegisters.put("SP", (int) cpu.getStack().getStackPointer());
-
-        for (int i = 0; i < memoryFields.length; i++) {
-            memoryFields[i].setText(String.format("0x%03X: 0x%02X", i, cpu.getMemory().get(i)));
+        for (int i = 0; i < emu.getCPU().getRegisters().getSize(); i++) {
+            registersGrid.add(
+                    createStyledTextField(
+                            String.format("V%X: 0x%03X", i, emu.getCPU().getRegisters().getRegister(i))),
+                    i % 2, i / 2);
+        }
+        for (int i = 0; i < specialRegisters.size(); i++) {
+            String k = (String) specialRegisters.keySet().toArray()[i];
+            registersGrid.add(
+                    createStyledTextField(String.format("%s: 0x%03X", k, specialRegisters.get(k))), 2, i);
         }
 
         for (int i = 0; i < stackFields.length; i++) {
@@ -232,6 +239,10 @@ public class DebuggerGUIComponents {
         if (file != null) {
             emu.loadRom(file.getAbsolutePath());
             System.out.println("File loaded: " + file.getAbsolutePath());
+            for (int i = 0; i < memoryFields.length; i++) {
+                memoryFields[i].setText(String.format("0x%03X: 0x%02X", i, emu.getCPU().getMemory().get(i)));
+            }
+
             updateDebugInfo();
         } else {
             System.out.println("File selection cancelled.");
