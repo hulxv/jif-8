@@ -1,8 +1,9 @@
 package scenes;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,13 +20,16 @@ public class WelcomeScene extends Scene {
     private Font labelFont;
     private Font label2Font;
     private Font buttonFont;
-    private Stage stage;
 
     private Emulator emulator;
 
     public WelcomeScene(Emulator emulator) {
         super(new VBox(), 1000, 750);
         VBox root = (VBox) getRoot();
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/jif8-logo.png")));
+        logo.setFitWidth(300);
+        logo.setPreserveRatio(true);
+        logo.setSmooth(true);
 
         this.emulator = emulator;
         labelFont = Font.loadFont(getClass().getResource("/fonts/PressStart2P-Regular.ttf").toExternalForm(),
@@ -38,7 +42,7 @@ public class WelcomeScene extends Scene {
         Label welcome = buildWelcomeLabel();
         Label jif = buildJif8Label();
         Button load = buildLoadbutton();
-        root.getChildren().addAll(welcome, jif, load);
+        root.getChildren().addAll(logo, welcome, jif, load);
         root.setSpacing(20);
         root.setStyle("-fx-background-color: rgba(33,32,32,1);");
         root.setAlignment(javafx.geometry.Pos.CENTER);
@@ -78,10 +82,9 @@ public class WelcomeScene extends Scene {
         return load;
     }
 
-  
     private File fileChooser() throws IOException {
 
-        Stage root = (Stage)getRoot().getScene().getWindow();
+        Stage root = (Stage) getRoot().getScene().getWindow();
         FileChooser fc = new FileChooser();
 
         File file = fc.showOpenDialog(root);
@@ -90,6 +93,7 @@ public class WelcomeScene extends Scene {
             System.out.println("File loaded: " + file.getAbsolutePath());
             root.setTitle("JIF-8 Emulator - " + file.getName());
             root.setScene(new GameScene(emulator));
+
         } else {
             System.out.println("File selection cancelled.");
         }
