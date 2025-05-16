@@ -24,6 +24,6 @@ public class SkeqInstruction5XY0 extends Instruction {
 
     @Override
     public String toString() {
-        return String.format("SKNE V%X, V%X", rX, rY);
+        return String.format("SKQE V%X, V%X", rX, rY);
     }
 }
