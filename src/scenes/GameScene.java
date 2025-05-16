@@ -35,7 +35,7 @@ public class GameScene extends Scene {
         root.setDividerPositions(0.66);
 
         this.setOnKeyPressed(e -> {
-            emulator.getCPU().getKeyboard().handleKeyPressed(e);;
+            emulator.getCPU().getKeyboard().handleKeyPressed(e);
         });
         this.setOnKeyReleased(e -> {
             emulator.getCPU().getKeyboard().handleKeyReleased(e);
@@ -43,7 +43,6 @@ public class GameScene extends Scene {
     }
 
     public void updateDisplay() {
-        System.out.println("Updating display");
         if (gDisplay != null) {
             gDisplay.render();
         }

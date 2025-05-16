@@ -86,7 +86,6 @@ public class CPU {
         System.out.printf("EXECUTE: PC: 0x%03X, I: 0x%03X, Instruction: %s\n", (int) PC, (int) I,
                 decodedInstruction.toString());
         executer.execute(decodedInstruction);
-        System.out.println("PC: " + PC);
         updateTimers();
     }
 
