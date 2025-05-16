@@ -51,7 +51,7 @@ public class WelcomeScene extends Scene {
 
     private Label buildWelcomeLabel() {
 
-        Label welcome = new Label("Welcome to ");
+        Label welcome = new Label("Welcome to");
         welcome.setFont(labelFont);
         welcome.setTextFill(Color.web("#24e804"));
 
